@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Library Catalogue</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    text-align: center;
+}
+.container {
+    width: 60%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+input, button {
+    margin: 5px;
+    padding: 10px;
+}
+button {
+    cursor: pointer;
+}
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+th {
+    background: #007BFF;
+    color: white;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Library Book Catalogue</h2>
+
+    <input type="text" id="title" placeholder="Title">
+    <input type="text" id="author" placeholder="Author">
+    <input type="number" id="bookId" placeholder="Book ID">
+    <br>
+
+    <button onclick="addBook()">Add Book</button>
+    <button onclick="searchBook()">Search Book</button>
+    <button onclick="removeBook()">Remove Book</button>
+    <button onclick="displayBooks()">Display Books</button>
+
+    <p id="message"></p>
+
+    <table id="bookTable">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+const MAX_BOOKS = 50;
+let books = [];
+
+function addBook() {
+    const title = document.getElementById("title").value.trim();
+    const author = document.getElementById("author").value.trim();
+    const id = document.getElementById("bookId").value.trim();
+
+    if (!title || !author || !id) {
+        showMessage("All fields required");
+        return;
+    }
+
+    if (books.length >= MAX_BOOKS) {
+        showMessage("Library is full");
+        return;
+    }
+
+    // Prevent duplicate ID
+    for (let b of books) {
+        if (b.id === id) {
+            showMessage("Duplicate Book ID not allowed");
+            return;
+        }
+    }
+
+    books.push({ id, title, author });
+    showMessage("Book added successfully");
+    clearInputs();
+}
+
+function searchBook() {
+    const title = document.getElementById("title").value.trim().toLowerCase();
+
+    if (!title) {
+        showMessage("Enter title to search");
+        return;
+    }
+
+    for (let b of books) {
+        if (b.title.toLowerCase() === title) {
+            showMessage(`Found: ${b.title} by ${b.author} (ID: ${b.id})`);
+            return;
+        }
+    }
+
+    showMessage("Book not found");
+}
+
+function removeBook() {
+    const title = document.getElementById("title").value.trim().toLowerCase();
+    const id = document.getElementById("bookId").value.trim();
+
+    if (!title && !id) {
+        showMessage("Enter Title or ID to remove");
+        return;
+    }
+
+    let index = -1;
+
+    for (let i = 0; i < books.length; i++) {
+        if (books[i].title.toLowerCase() === title || books[i].id === id) {
+            index = i;
+            break;
+        }
+    }
+
+    if (index === -1) {
+        showMessage("Book not found");
+        return;
+    }
+
+    // Shift elements (simulate array behavior)
+    for (let i = index; i < books.length - 1; i++) {
+        books[i] = books[i + 1];
+    }
+
+    books.pop();
+    showMessage("Book removed successfully");
+    displayBooks();
+}
+
+function displayBooks() {
+    const tbody = document.querySelector("#bookTable tbody");
+    tbody.innerHTML = "";
+
+    if (books.length === 0) {
+        showMessage("No books available");
+        return;
+    }
+
+    for (let b of books) {
+        let row = `<tr>
+            <td>${b.id}</td>
+            <td>${b.title}</td>
+            <td>${b.author}</td>
+        </tr>`;
+        tbody.innerHTML += row;
+    }
+}
+
+function showMessage(msg) {
+    document.getElementById("message").innerText = msg;
+}
+
+function clearInputs() {
+    document.getElementById("title").value = "";
+    document.getElementById("author").value = "";
+    document.getElementById("bookId").value = "";
+}
+</script>
+
+</body>
+</html>
