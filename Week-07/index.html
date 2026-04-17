@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smart To-Do</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+/* RESET */
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Inter',sans-serif;
+}
+
+/* BACKGROUND */
+body{
+  background: linear-gradient(135deg,#6366f1,#8b5cf6);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+}
+
+/* MAIN CARD */
+.container{
+  width:100%;
+  max-width:750px;
+  background:rgba(255,255,255,0.95);
+  backdrop-filter:blur(12px);
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 15px 40px rgba(0,0,0,0.2);
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.title{
+  font-size:22px;
+  font-weight:600;
+}
+
+.date{
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* INPUT */
+.input-area{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.input-area input{
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  outline:none;
+}
+
+.input-area button{
+  padding:12px 18px;
+  border:none;
+  border-radius:10px;
+  background:#6366f1;
+  color:white;
+  cursor:pointer;
+}
+
+.input-area button:hover{
+  background:#4f46e5;
+}
+
+/* STATS CARDS */
+.stats{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.stat{
+  flex:1;
+  background:#f9fafb;
+  padding:15px;
+  border-radius:12px;
+  text-align:center;
+}
+
+.stat h3{
+  font-size:18px;
+}
+
+.stat p{
+  font-size:12px;
+  color:#6b7280;
+}
+
+/* PROGRESS BAR */
+.progress-container{
+  height:10px;
+  background:#e5e7eb;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:20px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(to right,#22c55e,#4ade80);
+  transition:0.3s;
+}
+
+/* TASK */
+.task{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:10px;
+  background:#f9fafb;
+  transition:0.2s;
+}
+
+.task:hover{
+  transform:translateY(-2px);
+}
+
+.task-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* COMPLETED */
+.completed span{
+  text-decoration:line-through;
+  color:#9ca3af;
+}
+
+/* DELETE */
+.delete{
+  background:#ef4444;
+  border:none;
+  color:white;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="title">✨ My Tasks</div>
+    <div class="date" id="date"></div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-area">
+    <input id="taskInput" placeholder="Add a task..." onkeydown="if(event.key==='Enter') addTask()">
+    <button onclick="addTask()">Add</button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <h3 id="total">0</h3>
+      <p>Total</p>
+    </div>
+    <div class="stat">
+      <h3 id="done">0</h3>
+      <p>Completed</p>
+    </div>
+    <div class="stat">
+      <h3 id="pending">0</h3>
+      <p>Pending</p>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- TASK LIST -->
+  <div id="taskList"></div>
+
+</div>
+
+<script>
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function save(){
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function addTask(){
+  let input=document.getElementById("taskInput");
+  let text=input.value.trim();
+  if(!text) return;
+
+  tasks.push({text,done:false});
+  input.value="";
+  save();
+  render();
+}
+
+function toggle(i){
+  tasks[i].done=!tasks[i].done;
+  save();
+  render();
+}
+
+function del(i){
+  tasks.splice(i,1);
+  save();
+  render();
+}
+
+function render(){
+  let list="";
+  let doneCount=0;
+
+  tasks.forEach((t,i)=>{
+    if(t.done) doneCount++;
+
+    list+=`
+    <div class="task ${t.done?"completed":""}">
+      <div class="task-left">
+        <input type="checkbox" ${t.done?"checked":""} onclick="toggle(${i})">
+        <span>${t.text}</span>
+      </div>
+      <button class="delete" onclick="del(${i})">X</button>
+    </div>`;
+  });
+
+  document.getElementById("taskList").innerHTML=list;
+
+  let total=tasks.length;
+  let pending=total-doneCount;
+  let percent=total? (doneCount/total)*100 : 0;
+
+  document.getElementById("total").innerText=total;
+  document.getElementById("done").innerText=doneCount;
+  document.getElementById("pending").innerText=pending;
+  document.getElementById("progressBar").style.width=percent+"%";
+}
+
+/* DATE */
+document.getElementById("date").innerText =
+new Date().toLocaleDateString(undefined,{
+  weekday:"short",
+  day:"numeric",
+  month:"short"
+});
+
+render();
+
+</script>
+
+</body>
+</html>
