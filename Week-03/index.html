@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Home | TechFest Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0e1a;
+  --bg2:#111222;
+  --bg3:#161829;
+  --cyan:#00e5ff;
+  --magenta:#d400ff;
+  --mag2:#e040fb;
+  --text:#ffffff;
+  --dim:#8892aa;
+  --card:#13141f;
+  --card2:#1a1b2e;
+  --border:rgba(255,255,255,0.07);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:58px;
+  background:rgba(13,14,26,0.96);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+.logo{font-family:'Orbitron',monospace;font-size:17px;font-weight:800;letter-spacing:1px;cursor:pointer;display:flex;align-items:center;gap:0}
+.logo .t{color:var(--cyan)}
+.logo .v{color:var(--magenta)}
+.logo .yr{font-size:12px;color:var(--dim);font-weight:400;margin-left:6px;letter-spacing:0}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{
+  color:var(--dim);text-decoration:none;font-size:14px;font-weight:500;
+  position:relative;padding-bottom:4px;cursor:pointer;transition:color .2s;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--cyan)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-2px;left:0;right:0;
+  height:2px;background:var(--cyan);border-radius:1px;
+}
+
+/* ── PAGES ── */
+.page{display:none;padding-top:58px;min-height:100vh}
+.page.active{display:block}
+
+/* ═══════════════════════════
+   HOME PAGE
+═══════════════════════════ */
+
+/* HERO */
+.hero{
+  min-height:calc(100vh - 58px);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:60px 48px 80px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 60% at 75% 50%,rgba(120,0,220,.14) 0%,transparent 70%),
+    radial-gradient(ellipse 40% 50% at 15% 70%,rgba(0,180,255,.07) 0%,transparent 60%);
+  pointer-events:none;
+}
+/* Subtle grid */
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
+.hero-label{
+  display:flex;align-items:center;gap:12px;
+  font-size:11px;letter-spacing:4px;color:var(--dim);
+  text-transform:uppercase;margin-bottom:20px;
+  animation:fadeUp .8s ease both;
+}
+.hero-label::before{content:'';width:36px;height:1px;background:var(--cyan)}
+.hero-big{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(64px,11vw,150px);
+  font-weight:900;line-height:.92;letter-spacing:-2px;
+  background:linear-gradient(90deg,var(--cyan) 0%,#ffffff 38%,#c084fc 68%,var(--magenta) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  position:relative;z-index:2;
+  animation:fadeUp .8s ease .05s both;
+}
+.hero-ghost{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(50px,9vw,118px);
+  font-weight:900;letter-spacing:-2px;
+  color:rgba(255,255,255,.04);
+  margin-top:-10px;
+  animation:fadeUp .8s ease .1s both;
+}
+.hero-line{
+  width:0;height:3px;
+  background:linear-gradient(90deg,var(--cyan),transparent);
+  margin:12px 0 28px;
+  animation:growLine 1s ease .3s both;
+}
+@keyframes growLine{to{width:280px}}
+.hero-body{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;flex-wrap:wrap}
+.hero-left{flex:1;min-width:280px}
+.hero-sub{
+  font-size:17px;line-height:1.65;color:#ccd6f6;max-width:520px;margin-bottom:32px;
+  animation:fadeUp .8s ease .2s both;
+}
+.hero-sub .cy{color:var(--cyan);font-weight:600}
+.hero-sub .mg{color:var(--magenta);font-weight:600}
+.hero-btns{display:flex;gap:14px;flex-wrap:wrap;animation:fadeUp .8s ease .3s both}
+.btn-primary{
+  padding:13px 26px;border:1.5px solid var(--cyan);background:transparent;
+  color:var(--cyan);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+  transition:color .3s;position:relative;overflow:hidden;
+}
+.btn-primary::after{
+  content:'';position:absolute;inset:0;background:var(--cyan);
+  transform:translateX(-101%);transition:transform .3s ease;z-index:-1;
+}
+.btn-primary:hover{color:var(--bg)}
+.btn-primary:hover::after{transform:translateX(0)}
+.btn-secondary{
+  padding:13px 26px;border:1.5px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.04);color:var(--text);
+  font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;cursor:pointer;
+  transition:all .3s;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.08)}
+
+.hero-right{
+  display:flex;flex-direction:column;gap:10px;min-width:270px;
+  animation:fadeUp .8s ease .4s both;
+}
+.info-card{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:14px 18px;background:rgba(255,255,255,.025);
+  border-left:2px solid;
+}
+.info-card.c{border-color:var(--cyan)}
+.info-card.m{border-color:var(--magenta)}
+.info-icon{
+  width:34px;height:34px;border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.info-text h4{font-size:14px;font-weight:600;margin-bottom:3px}
+.info-text p{font-size:12px;color:var(--dim);line-height:1.45}
+.scroll-hint{
+  position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  font-size:10px;letter-spacing:3.5px;color:var(--dim);text-transform:uppercase;
+}
+.scroll-line{width:1px;height:44px;background:linear-gradient(to bottom,var(--cyan),transparent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* MARQUEE */
+.marquee-wrap{
+  overflow:hidden;padding:13px 0;
+  background:#071a1a;
+  border-top:1px solid rgba(0,229,255,.1);
+  border-bottom:1px solid rgba(0,229,255,.1);
+}
+.marquee-track{display:flex;width:max-content;animation:marquee 22s linear infinite}
+.marquee-item{
+  display:flex;align-items:center;gap:22px;padding-right:44px;
+  font-family:'Orbitron',monospace;font-size:13px;font-weight:600;
+  letter-spacing:3px;color:rgba(255,255,255,.45);
+}
+.mstar{color:var(--magenta);font-size:14px}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ABOUT */
+.about{
+  padding:88px 48px;
+  display:grid;grid-template-columns:1fr 1fr;gap:80px;
+  align-items:center;max-width:1400px;margin:0 auto;
+}
+.about-img-wrap{position:relative}
+.corner{
+  position:absolute;top:-10px;left:-10px;
+  width:55px;height:55px;
+  border-top:2px solid var(--cyan);border-left:2px solid var(--cyan);
+  z-index:2;
+}
+.about-img{
+  width:100%;height:480px;
+  background:linear-gradient(155deg,#050a1e 0%,#0d1a40 25%,#12063d 55%,#040b20 100%);
+  position:relative;overflow:hidden;
+}
+/* Neon city illustration */
+.about-img svg{position:absolute;inset:0;width:100%;height:100%}
+.about-h{
+  font-family:'Orbitron',monospace;
+  font-size:clamp(32px,4.5vw,52px);font-weight:900;line-height:1.08;margin-bottom:20px;
+}
+.grad-cy{background:linear-gradient(90deg,var(--cyan),#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.grad-mg{background:linear-gradient(90deg,#7c3aed,var(--magenta));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.about-p{color:var(--dim);font-size:15px;line-height:1.75;margin-bottom:30px}
+.about-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.acard{
+  background:var(--card2);border:1px solid var(--border);
+  border-radius:3px;padding:18px;transition:border-color .3s;
+}
+.acard:hover{border-color:rgba(0,229,255,.25)}
+.acard-icon{width:34px;height:34px;margin-bottom:10px}
+.acard h4{font-size:14px;font-weight:600;margin-bottom:6px}
+.acard p{font-size:12.5px;color:var(--dim);line-height:1.5}
+
+/* FEATURED EVENTS */
+.featured{padding:80px 48px;background:var(--bg2)}
+.feat-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px}
+.sec-label{font-size:11px;letter-spacing:3.5px;color:var(--cyan);text-transform:uppercase;margin-bottom:12px}
+.sec-h{font-family:'Orbitron',monospace;font-size:clamp(34px,5vw,52px);font-weight:900;line-height:1.1}
+.view-all{
+  font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);
+  cursor:pointer;transition:color .2s;display:flex;align-items:center;gap:6px;
+  text-decoration:none;padding-bottom:2px;border-bottom:1px solid transparent;
+}
+.view-all:hover{color:var(--text);border-color:var(--dim)}
+.ev-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.ev-card{
+  background:var(--card);border:1px solid var(--border);
+  overflow:hidden;cursor:pointer;transition:border-color .3s,transform .3s;
+}
+.ev-card:hover{border-color:rgba(0,229,255,.3);transform:translateY(-4px)}
+.ev-card.hl{border-color:rgba(0,229,255,.35)}
+.ev-thumb{width:100%;height:190px;position:relative;overflow:hidden;display:block}
+.ev-body{padding:18px}
+.ev-cat{font-size:10.5px;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:7px}
+.ev-cat.cy{color:var(--cyan)}.ev-cat.mg{color:var(--magenta)}
+.ev-title{font-family:'Orbitron',monospace;font-size:15px;font-weight:700;margin-bottom:7px}
+.ev-title.cy{color:var(--cyan)}
+.ev-desc{font-size:12.5px;color:var(--dim);line-height:1.5;margin-bottom:16px}
+.ev-reg{
+  font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text);border-bottom:1px solid var(--text);padding-bottom:2px;
+  cursor:pointer;transition:color .2s,border-color .2s;background:none;border-top:none;border-left:none;border-right:none;
+}
+.ev-reg:hover{color:var(--cyan);border-color:var(--cyan)}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.05)}
+.stat{background:var(--bg);padding:44px;text-align:center}
+.stat-n{
+  font-family:'Orbitron',monospace;font-size:46px;font-weight:900;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.stat-l{font-size:12px;color:var(--dim);letter-spacing:2.5px;text-transform:uppercase;margin-top:8px}
+
+/* CTA */
+.cta-wrap{padding:100px 48px;background:linear-gradient(180deg,var(--bg2),var(--bg));display:flex;justify-content:center}
+.cta-box{
+  max-width:660px;width:100%;padding:56px;text-align:center;
+  background:rgba(255,255,255,.015);position:relative;
+  border:1px solid transparent;
+}
+.cta-box::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(var(--bg),var(--bg)) padding-box,
+             linear-gradient(135deg,var(--cyan),var(--magenta)) border-box;
+  border:1px solid transparent;border-radius:inherit;
+}
+.cta-top-line{
+  position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--cyan),var(--magenta));
+}
+.cta-box h2{font-family:'Orbitron',monospace;font-size:38px;font-weight:900;margin-bottom:6px;position:relative}
+.cta-ghost{display:block;color:rgba(255,255,255,.15);font-size:34px}
+.cta-box p{color:var(--dim);font-size:14px;line-height:1.7;margin-bottom:32px;position:relative}
+.btn-cta{
+  padding:15px 40px;background:transparent;border:1.5px solid var(--text);
+  color:var(--text);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;
+  letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:all .3s;position:relative;
+}
+.btn-cta:hover{background:var(--text);color:var(--bg)}
+
+/* GET IN TOUCH */
+.git-section{padding:0;background:var(--bg2)}
+.git-inner{
+  padding:80px 48px;display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;max-width:1200px;margin:0 auto;
+}
+.git-inner h2{font-family:'Orbitron',monospace;font-size:28px;font-weight:700;margin-bottom:28px}
+.ci{display:flex;align-items:flex-start;gap:14px;margin-bottom:22px}
+.ci-icon{
+  width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(0,229,255,.3);background:rgba(0,229,255,.04);flex-shrink:0;
+}
+.ci-icon.m{border-color:rgba(212,0,255,.3);background:rgba(212,0,255,.04)}
+.ci h4{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.ci p{font-size:12.5px;color:var(--dim);line-height:1.45}
+.map-box{
+  width:100%;height:330px;background:#0b0c18;
+  border:1px solid var(--border);position:relative;overflow:hidden;
+}
+.map-box::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(0,229,255,.04) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(0,229,255,.04) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.map-dot{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:10px;height:10px;border-radius:50%;background:var(--cyan);
+  box-shadow:0 0 0 6px rgba(0,229,255,.15),0 0 20px var(--cyan);
+  animation:ping 2s ease-in-out infinite;
+}
+@keyframes ping{0%,100%{box-shadow:0 0 0 6px rgba(0,229,255,.15),0 0 20px var(--cyan)}50%{box-shadow:0 0 0 12px rgba(0,229,255,.05),0 0 30px var(--cyan)}}
+
+/* FOOTER */
+footer{background:#090a14;padding:56px 48px 28px;border-top:1px solid rgba(255,255,255,.04)}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:56px;margin-bottom:44px}
+.ft-brand p{font-size:12.5px;color:var(--dim);line-height:1.65;max-width:210px;margin-top:12px}
+.ft-col h4{font-size:13.5px;font-weight:600;margin-bottom:18px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-col ul li a{color:var(--dim);text-decoration:none;font-size:13px;cursor:pointer;transition:color .2s}
+.ft-col ul li a:hover{color:var(--text)}
+.ft-info{display:flex;align-items:center;gap:9px;margin-bottom:10px;font-size:12.5px;color:var(--dim)}
+.ft-info svg{width:13px;height:13px;flex-shrink:0}
+.ft-btn{
+  display:inline-block;margin-top:14px;padding:9px 18px;
+  background:var(--cyan);color:var(--bg);font-size:12.5px;font-weight:700;
+  letter-spacing:.5px;cursor:pointer;border:none;transition:opacity .2s;
+}
+.ft-btn:hover{opacity:.88}
+.ft-bottom{
+  border-top:1px solid rgba(255,255,255,.05);padding-top:20px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:11.5px;color:var(--dim);
+}
+.ft-bottom .inn{color:var(--cyan)}.ft-bottom .pas{color:var(--magenta)}
+
+/* ═══════════════════════════
+   EVENTS PAGE
+═══════════════════════════ */
+.ev-page{padding:80px 48px;max-width:1200px;margin:0 auto}
+.ev-page-label{font-size:11px;letter-spacing:3.5px;color:var(--cyan);text-align:center;text-transform:uppercase;margin-bottom:14px}
+.ev-page-h{font-family:'Orbitron',monospace;font-size:clamp(38px,6vw,62px);font-weight:900;text-align:center;margin-bottom:14px}
+.ev-page-sub{text-align:center;color:var(--dim);font-size:14.5px;margin-bottom:60px;line-height:1.6}
+.ev-full-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.efc{background:var(--card);border:1px solid var(--border);overflow:hidden;position:relative;transition:border-color .3s}
+.efc:hover{border-color:rgba(0,229,255,.3)}
+.efc-badge{
+  position:absolute;top:12px;right:12px;z-index:5;
+  background:var(--cyan);color:var(--bg);font-size:9.5px;
+  font-weight:700;letter-spacing:1px;padding:4px 10px;text-transform:uppercase;
+}
+.efc-img{width:100%;height:215px;display:block;position:relative;overflow:hidden}
+.efc-body{padding:22px}
+.efc-title{font-family:'Orbitron',monospace;font-size:17px;font-weight:700;margin-bottom:9px}
+.efc-desc{font-size:12.5px;color:var(--dim);line-height:1.65;margin-bottom:18px}
+.efc-meta{display:flex;flex-direction:column;gap:7px;margin-bottom:22px}
+.efc-row{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--dim)}
+.efc-row svg{width:13px;height:13px;color:var(--cyan);flex-shrink:0}
+.efc-actions{display:flex;flex-direction:column;gap:9px}
+.btn-reg-ev{
+  width:100%;padding:11px;background:var(--cyan);color:var(--bg);
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:700;
+  letter-spacing:.5px;border:none;cursor:pointer;transition:opacity .2s;text-transform:uppercase;
+}
+.btn-reg-ev:hover{opacity:.85}
+.btn-rules{
+  width:100%;padding:11px;background:transparent;color:var(--dim);
+  font-family:'Inter',sans-serif;font-size:12.5px;font-weight:600;
+  letter-spacing:.5px;border:1px solid rgba(255,255,255,.1);
+  cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;text-transform:uppercase;
+}
+.btn-rules:hover{border-color:rgba(255,255,255,.3);color:var(--text)}
+
+/* ═══════════════════════════
+   REGISTER PAGE
+═══════════════════════════ */
+.reg-page{padding:80px 48px;max-width:680px;margin:0 auto}
+.reg-label{font-size:11px;letter-spacing:3.5px;color:var(--cyan);text-align:center;text-transform:uppercase;margin-bottom:14px}
+.reg-h{font-family:'Orbitron',monospace;font-size:clamp(30px,5vw,50px);font-weight:900;text-align:center;margin-bottom:12px}
+.reg-sub{text-align:center;color:var(--dim);font-size:13.5px;margin-bottom:44px}
+.form-wrap{background:var(--card);border:1px solid var(--border);padding:38px}
+.form-sec{font-size:15px;font-weight:600;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.form-row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fg{margin-bottom:18px}
+.fg label{display:block;font-size:12.5px;color:var(--dim);margin-bottom:7px}
+.fg input,.fg select{
+  width:100%;padding:11px 15px;background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.09);color:var(--text);
+  font-family:'Inter',sans-serif;font-size:13.5px;outline:none;transition:border-color .2s;
+}
+.fg input::placeholder{color:rgba(255,255,255,.22)}
+.fg select option{background:#1a1b2e}
+.fg input:focus,.fg select:focus{border-color:var(--cyan)}
+.btn-submit{
+  width:100%;padding:15px;background:var(--cyan);color:var(--bg);
+  font-family:'Inter',sans-serif;font-size:13.5px;font-weight:700;
+  letter-spacing:.5px;text-transform:uppercase;border:none;cursor:pointer;
+  transition:opacity .2s;margin-top:6px;
+}
+.btn-submit:hover{opacity:.9}
+
+/* ═══════════════════════════
+   CONTACT PAGE
+═══════════════════════════ */
+.con-page{padding:80px 48px;max-width:900px;margin:0 auto}
+.con-label{font-size:11px;letter-spacing:3.5px;color:var(--cyan);text-align:center;text-transform:uppercase;margin-bottom:14px}
+.con-h{font-family:'Orbitron',monospace;font-size:clamp(30px,5vw,48px);font-weight:900;text-align:center;margin-bottom:12px}
+.con-sub{text-align:center;color:var(--dim);font-size:13.5px;margin-bottom:60px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px;margin-bottom:56px}
+.tc{background:var(--card);border:1px solid var(--border);overflow:hidden}
+.tc-img{width:100%;height:230px;position:relative;overflow:hidden}
+.tc-body{padding:18px}
+.tc-name{font-size:15px;font-weight:700;margin-bottom:6px}
+.tc-role{font-size:12.5px;color:var(--cyan);margin-bottom:2px}
+.tc-dept{font-size:12px;color:var(--magenta);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.tc-contact{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;
+  background:rgba(255,255,255,.025);border:1px solid var(--border);
+  margin-bottom:7px;font-size:12.5px;color:var(--dim);
+}
+.gi-box{background:var(--card);border:1px solid var(--border);padding:46px;text-align:center}
+.gi-box h3{font-family:'Orbitron',monospace;font-size:26px;font-weight:700;margin-bottom:10px}
+.gi-box>p{color:var(--dim);font-size:13.5px;margin-bottom:36px;line-height:1.6}
+.gi-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gi-card{border:1px solid var(--border);padding:22px;display:flex;flex-direction:column;align-items:center;gap:10px}
+.gi-icon{
+  width:46px;height:46px;border-radius:50%;
+  border:1px solid rgba(0,229,255,.3);
+  display:flex;align-items:center;justify-content:center;
+}
+.gi-icon.m{border-color:rgba(212,0,255,.3)}
+.gi-card h4{font-size:14px;font-weight:600}
+.gi-card p{font-size:12.5px;color:var(--dim)}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .75s ease,transform .75s ease}
+.reveal.vis{opacity:1;transform:translateY(0)}
+.reveal.d1{transition-delay:.1s}.reveal.d2{transition-delay:.2s}.reveal.d3{transition-delay:.3s}
+
+/* Modal toast */
+.toast{
+  position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:var(--card2);border:1px solid var(--cyan);color:var(--text);
+  padding:14px 28px;font-size:14px;font-weight:500;letter-spacing:.5px;
+  opacity:0;transition:all .4s;z-index:9999;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="logo" onclick="go('home')">
+    <span class="t">TECHNO</span><span class="v">VA</span>
+    <span class="yr">2026</span>
+  </div>
+  <ul class="nav-links">
+    <li><a data-p="home" onclick="go('home')" class="active">Home</a></li>
+    <li><a data-p="events" onclick="go('events')">Events</a></li>
+    <li><a data-p="register" onclick="go('register')">Register</a></li>
+    <li><a data-p="contact" onclick="go('contact')">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ═══ HOME ═══ -->
+<div id="p-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-label">College Technical Festival</div>
+    <div class="hero-big">TECHNOVA</div>
+    <div class="hero-ghost">2026</div>
+    <div class="hero-line"></div>
+    <div class="hero-body">
+      <div class="hero-left">
+        <p class="hero-sub">Where <span class="cy">Innovation</span> Meets <span class="mg">Excellence</span>. Join the digital revolution at the year's most anticipated tech summit.</p>
+        <div class="hero-btns">
+          <button class="btn-primary" onclick="go('register')">REGISTER NOW &rsaquo;</button>
+          <button class="btn-secondary" onclick="go('events')">EXPLORE EVENTS</button>
+        </div>
+      </div>
+      <div class="hero-right">
+        <div class="info-card c">
+          <div class="info-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="info-text">
+            <h4>March 15–17, 2026</h4>
+            <p>Save the dates for 72 hours of non-stop innovation.</p>
+          </div>
+        </div>
+        <div class="info-card m">
+          <div class="info-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#d400ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
+          <div class="info-text">
+            <h4>Main Campus Auditorium</h4>
+            <p>The epicenter of technology and creativity.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span>SCROLL TO EXPLORE</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track" id="mtrack">
+      <span class="marquee-item">COMPETE <span class="mstar">✦</span></span>
+      <span class="marquee-item">EXCEL <span class="mstar">✦</span></span>
+      <span class="marquee-item">INNOVATE <span class="mstar">✦</span></span>
+      <span class="marquee-item">COMPETE <span class="mstar">✦</span></span>
+      <span class="marquee-item">EXCEL <span class="mstar">✦</span></span>
+      <span class="marquee-item">INNOVATE <span class="mstar">✦</span></span>
+      <span class="marquee-item">COMPETE <span class="mstar">✦</span></span>
+      <span class="marquee-item">EXCEL <span class="mstar">✦</span></span>
+      <span class="marquee-item">INNOVATE <span class="mstar">✦</span></span>
+      <span class="marquee-item">COMPETE <span class="mstar">✦</span></span>
+      <span class="marquee-item">EXCEL <span class="mstar">✦</span></span>
+      <span class="marquee-item">INNOVATE <span class="mstar">✦</span></span>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <section class="about reveal">
+    <div class="about-img-wrap">
+      <div class="corner"></div>
+      <div class="about-img">
+        <!-- Neon futuristic city SVG -->
+        <svg viewBox="0 0 600 500" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#020818"/>
+              <stop offset="100%" stop-color="#0d1a40"/>
+            </linearGradient>
+            <linearGradient id="blg" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#1a4a9a"/>
+              <stop offset="100%" stop-color="#060d28"/>
+            </linearGradient>
+            <linearGradient id="glow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#00e5ff" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#00e5ff" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="blur2"><feGaussianBlur stdDeviation="2"/></filter>
+            <filter id="blur6"><feGaussianBlur stdDeviation="6"/></filter>
+          </defs>
+          <rect width="600" height="500" fill="url(#sky)"/>
+          <!-- Background city haze -->
+          <ellipse cx="300" cy="300" rx="280" ry="100" fill="#2a00ff" opacity=".04" filter="url(#blur6)"/>
+          <!-- Far buildings -->
+          <rect x="30" y="200" width="40" height="300" fill="#060c24"/>
+          <rect x="80" y="230" width="30" height="270" fill="#070d26"/>
+          <rect x="500" y="210" width="50" height="290" fill="#060c24"/>
+          <rect x="540" y="240" width="35" height="260" fill="#070d26"/>
+          <!-- Main tower -->
+          <rect x="255" y="50" width="90" height="450" fill="#091530"/>
+          <rect x="265" y="50" width="70" height="450" fill="url(#blg)"/>
+          <!-- Tower top light -->
+          <rect x="288" y="45" width="24" height="8" fill="#00e5ff" opacity=".9"/>
+          <rect x="288" y="45" width="24" height="8" fill="#00e5ff" filter="url(#blur2)" opacity=".8"/>
+          <!-- Tower windows -->
+          <g fill="#1a6aaa" opacity=".5">
+            <rect x="270" y="90" width="8" height="5"/>  <rect x="284" y="90" width="8" height="5"/>  <rect x="298" y="90" width="8" height="5"/>  <rect x="312" y="90" width="8" height="5"/>
+            <rect x="270" y="105" width="8" height="5"/> <rect x="284" y="105" width="8" height="5"/> <rect x="298" y="105" width="8" height="5"/> <rect x="312" y="105" width="8" height="5"/>
+            <rect x="270" y="120" width="8" height="5"/> <rect x="298" y="120" width="8" height="5"/> <rect x="312" y="120" width="8" height="5"/>
+            <rect x="270" y="135" width="8" height="5"/> <rect x="284" y="135" width="8" height="5"/> <rect x="312" y="135" width="8" height="5"/>
+            <rect x="270" y="150" width="8" height="5"/> <rect x="284" y="150" width="8" height="5"/> <rect x="298" y="150" width="8" height="5"/>
+          </g>
+          <!-- Mid buildings -->
+          <rect x="120" y="180" width="60" height="320" fill="#07112a"/>
+          <rect x="190" y="210" width="40" height="290" fill="#060f24"/>
+          <rect x="370" y="190" width="55" height="310" fill="#07112a"/>
+          <rect x="435" y="220" width="45" height="280" fill="#060f24"/>
+          <!-- Road perspective lines (magenta) -->
+          <line x1="300" y1="420" x2="20" y2="600" stroke="#e040fb" stroke-width="2.5" opacity=".7"/>
+          <line x1="300" y1="420" x2="100" y2="600" stroke="#e040fb" stroke-width="1.5" opacity=".45"/>
+          <line x1="300" y1="420" x2="180" y2="600" stroke="#e040fb" stroke-width="1" opacity=".25"/>
+          <line x1="300" y1="420" x2="580" y2="600" stroke="#00e5ff" stroke-width="2.5" opacity=".7"/>
+          <line x1="300" y1="420" x2="500" y2="600" stroke="#00e5ff" stroke-width="1.5" opacity=".45"/>
+          <line x1="300" y1="420" x2="420" y2="600" stroke="#00e5ff" stroke-width="1" opacity=".25"/>
+          <!-- Road glow -->
+          <ellipse cx="300" cy="430" rx="200" ry="18" fill="#7c3aed" opacity=".12" filter="url(#blur6)"/>
+          <!-- Ground reflection -->
+          <rect x="0" y="420" width="600" height="80" fill="#050a18"/>
+          <ellipse cx="300" cy="435" rx="160" ry="12" fill="#e040fb" opacity=".06" filter="url(#blur6)"/>
+          <!-- Vertical glow beam -->
+          <line x1="300" y1="420" x2="300" y2="50" stroke="url(#glow)" stroke-width="2" opacity=".3"/>
+        </svg>
+      </div>
+    </div>
+    <div class="about-content">
+      <h2 class="about-h">
+        <span style="color:#fff">The Future is</span><br>
+        <span class="grad-cy">Now </span>
+        <span class="grad-mg">Loading...</span>
+      </h2>
+      <p class="about-p">TECHNOVA 2026 is not just a festival; it's a glimpse into the future. We bring together the brightest minds, the boldest creators, and the most innovative technologies under one digital canopy.</p>
+      <div class="about-cards">
+        <div class="acard">
+          <svg class="acard-icon" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <h4>Innovation</h4>
+          <p>Pushing boundaries with cutting-edge tech showcases.</p>
+        </div>
+        <div class="acard">
+          <svg class="acard-icon" viewBox="0 0 24 24" fill="none" stroke="#e040fb" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          <h4>Competition</h4>
+          <p>National level hackathons and coding challenges.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURED EVENTS -->
+  <section class="featured">
+    <div class="feat-head reveal">
+      <div>
+        <div class="sec-label">COMPETITIONS</div>
+        <div class="sec-h">Featured<br>Events</div>
+      </div>
+      <a class="view-all" onclick="go('events')">VIEW ALL EVENTS &rarr;</a>
+    </div>
+    <div class="ev-grid reveal d1">
+      <!-- Card 1 -->
+      <div class="ev-card">
+        <div class="ev-thumb" style="background:linear-gradient(140deg,#12062e 0%,#22085a 50%,#12062e 100%)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.85))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.18" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width=".8"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="ev-body">
+          <div class="ev-cat cy">DEVELOPMENT</div>
+          <div class="ev-title">Coding Hackathon</div>
+          <div class="ev-desc">Build innovative software solutions within a limited time to solve real-world problems.</div>
+          <div style="padding-top:16px"><button class="ev-reg" onclick="go('register')">REGISTER</button></div>
+        </div>
+      </div>
+      <!-- Card 2 (highlighted) -->
+      <div class="ev-card hl">
+        <div class="ev-thumb" style="background:linear-gradient(140deg,#041830 0%,#062e58 50%,#041830 100%)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.85))"></div>
+          <div style="position:absolute;top:12px;left:12px;color:var(--cyan)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+        </div>
+        <div class="ev-body">
+          <div class="ev-cat cy">DESIGN & CODE</div>
+          <div class="ev-title cy">Web Dev Challenge</div>
+          <div class="ev-desc">Craft the most immersive and responsive web experiences.</div>
+          <div style="padding-top:16px"><button class="ev-reg" onclick="go('register')">REGISTER</button></div>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div class="ev-card">
+        <div class="ev-thumb" style="background:linear-gradient(140deg,#1a0808 0%,#380e0e 50%,#1a0808 100%)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.85))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.18" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width=".8"><circle cx="12" cy="8" r="5"/><path d="M5 20a7 7 0 0114 0"/></svg>
+        </div>
+        <div class="ev-body">
+          <div class="ev-cat mg">ENGINEERING</div>
+          <div class="ev-title">Robotics Wars</div>
+          <div class="ev-desc">Design and control robots to battle against others in an intense arena showdown.</div>
+          <div style="padding-top:16px"><button class="ev-reg" onclick="go('register')">REGISTER</button></div>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div class="ev-card">
+        <div class="ev-thumb" style="background:linear-gradient(140deg,#041420 0%,#062840 50%,#041420 100%)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(0,0,0,.85))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.18" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width=".8"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <div class="ev-body">
+          <div class="ev-cat cy">INTELLIGENCE</div>
+          <div class="ev-title">AI/ML Quiz</div>
+          <div class="ev-desc">Test your knowledge of artificial intelligence and machine learning concepts through challenging questions.</div>
+          <div style="padding-top:16px"><button class="ev-reg" onclick="go('register')">REGISTER</button></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats reveal">
+    <div class="stat"><div class="stat-n">50+</div><div class="stat-l">Events</div></div>
+    <div class="stat"><div class="stat-n">5K+</div><div class="stat-l">Participants</div></div>
+    <div class="stat"><div class="stat-n">₹10L</div><div class="stat-l">Prize Pool</div></div>
+    <div class="stat"><div class="stat-n">72h</div><div class="stat-l">Non-Stop</div></div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-wrap">
+    <div class="cta-box reveal">
+      <div class="cta-top-line"></div>
+      <h2>Ready to<br><span class="cta-ghost">Ascend?</span></h2>
+      <p>Secure your spot at TECHNOVA 2026. Registration closes soon. Join individual events or register your team today.</p>
+      <button class="btn-cta" onclick="go('register')">REGISTER NOW</button>
+    </div>
+  </section>
+
+  <!-- GET IN TOUCH -->
+  <div class="git-section">
+    <div class="git-inner reveal">
+      <div>
+        <h2>Get in Touch</h2>
+        <div class="ci">
+          <div class="ci-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          </div>
+          <div>
+            <h4>Venue</h4>
+            <p>Main Campus Auditorium,<br>Institute of Technology</p>
+          </div>
+        </div>
+        <div class="ci">
+          <div class="ci-icon m">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d400ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div>
+            <h4>Contact Organizers</h4>
+            <p>techfest@college.edu<br>+1 (555) 123-4567</p>
+          </div>
+        </div>
+      </div>
+      <div class="map-box"><div class="map-dot"></div></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="logo"><span class="t">TECHNO</span><span class="v">VA</span><span class="yr">2026</span></div>
+        <p>Where Innovation Meets Excellence. Join us for the premier technical festival of the year.</p>
+      </div>
+      <div class="ft-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a onclick="go('home')">Home</a></li>
+          <li><a onclick="go('events')">Events</a></li>
+          <li><a onclick="go('register')">Register</a></li>
+          <li><a onclick="go('contact')">Contact</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>Event Info</h4>
+        <div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Main Campus Auditorium</div>
+        <div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@technova2026.edu</div>
+        <div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+1 (555) 123-4567</div>
+      </div>
+      <div class="ft-col">
+        <h4>Ready to Join?</h4>
+        <p style="font-size:12.5px;color:var(--dim);line-height:1.6">Register now and be part of the most exciting technical festival of 2026.</p>
+        <button class="ft-btn" onclick="go('register')">Register Now</button>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 TECHNOVA 2026. All rights reserved.</span>
+      <span>Designed with <span class="inn">innovation</span> and <span class="pas">passion</span></span>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══ EVENTS ═══ -->
+<div id="p-events" class="page">
+  <div class="ev-page">
+    <div class="ev-page-label">COMPETE & EXCEL</div>
+    <div class="ev-page-h">TechFest Events</div>
+    <div class="ev-page-sub">Choose your challenge and showcase your skills in cutting-edge technical competitions</div>
+    <div class="ev-full-grid">
+
+      <!-- CodeSprint -->
+      <div class="efc">
+        <div class="efc-badge">TEAM EVENT</div>
+        <div class="efc-img" style="background:linear-gradient(140deg,#0d0a28,#1e1050)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.75))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.2" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#9333ea" stroke-width=".7"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="efc-body">
+          <div class="efc-title">CodeSprint 2024</div>
+          <div class="efc-desc">A 24-hour coding marathon challenging participants to solve complex algorithmic problems and build innovative solutions.</div>
+          <div class="efc-meta">
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Nov 16, 2024</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 09:00</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Computer Science Lab 1 &amp; 2</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> Team Size: 3–4 members</div>
+          </div>
+          <div class="efc-actions">
+            <button class="btn-reg-ev" onclick="go('register')">Register for Event</button>
+            <button class="btn-rules">View Rules ↗</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RoboWarz -->
+      <div class="efc">
+        <div class="efc-badge">TEAM EVENT</div>
+        <div class="efc-img" style="background:linear-gradient(140deg,#180808,#300e0e)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.75))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.2" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width=".7"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="7" cy="11" r="4"/><circle cx="17" cy="11" r="4"/><path d="M12 7v4M9 21v-2M15 21v-2"/></svg>
+        </div>
+        <div class="efc-body">
+          <div class="efc-title">RoboWarz</div>
+          <div class="efc-desc">Design, build, and battle your autonomous robots in an arena. Showcase your engineering and programming skills.</div>
+          <div class="efc-meta">
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Nov 16, 2024</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 10:00</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Auditorium Arena</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg> Team Size: 3–5 members</div>
+          </div>
+          <div class="efc-actions">
+            <button class="btn-reg-ev" onclick="go('register')">Register for Event</button>
+            <button class="btn-rules">View Rules ↗</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- DataDive -->
+      <div class="efc">
+        <div class="efc-img" style="background:linear-gradient(140deg,#061422,#0c2844)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.75))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.2" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width=".7"><path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+        </div>
+        <div class="efc-body">
+          <div class="efc-title">DataDive Analytics Challenge</div>
+          <div class="efc-desc">Analyze real-world datasets to extract insights and present your findings. Open to aspiring data scientists and analysts.</div>
+          <div class="efc-meta">
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Nov 17, 2024</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 14:00</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Seminar Hall 3</div>
+          </div>
+          <div class="efc-actions">
+            <button class="btn-reg-ev" onclick="go('register')">Register for Event</button>
+            <button class="btn-rules">View Rules ↗</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Innovate-a-Thon -->
+      <div class="efc">
+        <div class="efc-badge">TEAM EVENT</div>
+        <div class="efc-img" style="background:linear-gradient(140deg,#181000,#2e2000)">
+          <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,.75))"></div>
+          <svg style="position:absolute;top:50%;left:50%;transform:translate(-50%,-52%);opacity:.2" width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width=".7"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+        </div>
+        <div class="efc-body">
+          <div class="efc-title">Innovate-a-Thon</div>
+          <div class="efc-desc">Pitch your groundbreaking ideas for a chance to win mentorship and seed funding. Focus on sustainable technology solutions.</div>
+          <div class="efc-meta">
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Nov 18, 2024</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> 08:00</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Incubation Center</div>
+            <div class="efc-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg> Team Size: 1–3 members</div>
+          </div>
+          <div class="efc-actions">
+            <button class="btn-reg-ev" onclick="go('register')">Register for Event</button>
+            <button class="btn-rules">View Rules ↗</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- Footer repeated -->
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand"><div class="logo"><span class="t">TECHNO</span><span class="v">VA</span><span class="yr">2026</span></div><p>Where Innovation Meets Excellence. Join us for the premier technical festival of the year.</p></div>
+      <div class="ft-col"><h4>Quick Links</h4><ul><li><a onclick="go('home')">Home</a></li><li><a onclick="go('events')">Events</a></li><li><a onclick="go('register')">Register</a></li><li><a onclick="go('contact')">Contact</a></li></ul></div>
+      <div class="ft-col"><h4>Event Info</h4><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Main Campus Auditorium</div><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@technova2026.edu</div><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+1 (555) 123-4567</div></div>
+      <div class="ft-col"><h4>Ready to Join?</h4><p style="font-size:12.5px;color:var(--dim);line-height:1.6">Register now and be part of the most exciting technical festival of 2026.</p><button class="ft-btn" onclick="go('register')">Register Now</button></div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 TECHNOVA 2026. All rights reserved.</span><span>Designed with <span class="inn">innovation</span> and <span class="pas">passion</span></span></div>
+  </footer>
+</div>
+
+<!-- ═══ REGISTER ═══ -->
+<div id="p-register" class="page">
+  <div class="reg-page">
+    <div class="reg-label">JOIN THE INNOVATION</div>
+    <div class="reg-h">Event Registration</div>
+    <div class="reg-sub">Fill out the form below to register for TECHNOVA 2026 events</div>
+    <div class="form-wrap">
+      <div class="form-sec">Personal Information</div>
+      <div class="form-row2">
+        <div class="fg"><label>Full Name</label><input type="text" placeholder="Enter your full name"></div>
+        <div class="fg"><label>Email Address</label><input type="email" placeholder="your.email@example.com"></div>
+      </div>
+      <div class="fg" style="max-width:340px"><label>Phone Number</label><input type="tel" placeholder="+1 (555) 123-4567"></div>
+      <div class="form-sec" style="margin-top:8px">Academic Information</div>
+      <div class="form-row2">
+        <div class="fg"><label>College Name</label><input type="text" placeholder="Enter your college name"></div>
+        <div class="fg"><label>Department</label><input type="text" placeholder="e.g., Computer Science"></div>
+      </div>
+      <div class="fg" style="max-width:340px">
+        <label>Year of Study</label>
+        <select><option value="">Select year</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>Postgraduate</option></select>
+      </div>
+      <div class="form-sec" style="margin-top:8px">Event Selection</div>
+      <div class="fg">
+        <label>Select Event</label>
+        <select><option value="">Select an event</option><option>Coding Hackathon</option><option>Web Dev Challenge</option><option>Robotics Wars</option><option>AI/ML Quiz</option><option>CodeSprint 2024</option><option>RoboWarz</option><option>DataDive Analytics Challenge</option><option>Innovate-a-Thon</option></select>
+      </div>
+      <button class="btn-submit" onclick="showToast('Registration submitted successfully! 🎉')">Submit Registration</button>
+    </div>
+  </div>
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand"><div class="logo"><span class="t">TECHNO</span><span class="v">VA</span><span class="yr">2026</span></div><p>Where Innovation Meets Excellence. Join us for the premier technical festival of the year.</p></div>
+      <div class="ft-col"><h4>Quick Links</h4><ul><li><a onclick="go('home')">Home</a></li><li><a onclick="go('events')">Events</a></li><li><a onclick="go('register')">Register</a></li><li><a onclick="go('contact')">Contact</a></li></ul></div>
+      <div class="ft-col"><h4>Event Info</h4><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Main Campus Auditorium</div><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@technova2026.edu</div><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+1 (555) 123-4567</div></div>
+      <div class="ft-col"><h4>Ready to Join?</h4><p style="font-size:12.5px;color:var(--dim);line-height:1.6">Register now and be part of the most exciting technical festival of 2026.</p><button class="ft-btn" onclick="go('register')">Register Now</button></div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 TECHNOVA 2026. All rights reserved.</span><span>Designed with <span class="inn">innovation</span> and <span class="pas">passion</span></span></div>
+  </footer>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div id="p-contact" class="page">
+  <div class="con-page">
+    <div class="con-label">GET IN TOUCH</div>
+    <div class="con-h">Contact Our Team</div>
+    <div class="con-sub">Have questions about TECHNOVA 2026? Our organizing team is here to help</div>
+    <div class="team-grid">
+      <div class="tc">
+        <div class="tc-img" style="background:linear-gradient(135deg,#0d0d2e,#1e0a40,#0d1830)">
+          <!-- Silhouette placeholder -->
+          <svg style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);opacity:.35" width="140" height="200" viewBox="0 0 140 200" fill="none">
+            <ellipse cx="70" cy="55" rx="32" ry="38" fill="#c084fc"/>
+            <path d="M15 200 Q15 120 70 120 Q125 120 125 200Z" fill="#9333ea"/>
+          </svg>
+          <div style="position:absolute;right:0;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,rgba(120,0,200,.25))"></div>
+        </div>
+        <div class="tc-body">
+          <div class="tc-name">Sarah Chen</div>
+          <div class="tc-role">⚙ Logistics Coordinator</div>
+          <div class="tc-dept">🔷 Operations</div>
+          <div class="tc-contact"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>sarah.chen@techfest.org</div>
+          <div class="tc-contact"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d400ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+1-555-123-4567</div>
+        </div>
+      </div>
+    </div>
+    <div class="gi-box">
+      <h3>General Inquiries</h3>
+      <p>For general questions about TECHNOVA 2026, feel free to reach out through any of the following channels:</p>
+      <div class="gi-cards">
+        <div class="gi-card">
+          <div class="gi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <h4>Email</h4><p>info@technova2026.edu</p>
+        </div>
+        <div class="gi-card">
+          <div class="gi-icon m"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d400ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+          <h4>Phone</h4><p>+1 (555) 123-4567</p>
+        </div>
+        <div class="gi-card">
+          <div class="gi-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <h4>Location</h4><p>Main Campus Auditorium</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    <div class="ft-grid">
+      <div class="ft-brand"><div class="logo"><span class="t">TECHNO</span><span class="v">VA</span><span class="yr">2026</span></div><p>Where Innovation Meets Excellence. Join us for the premier technical festival of the year.</p></div>
+      <div class="ft-col"><h4>Quick Links</h4><ul><li><a onclick="go('home')">Home</a></li><li><a onclick="go('events')">Events</a></li><li><a onclick="go('register')">Register</a></li><li><a onclick="go('contact')">Contact</a></li></ul></div>
+      <div class="ft-col"><h4>Event Info</h4><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Main Campus Auditorium</div><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>info@technova2026.edu</div><div class="ft-info"><svg viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.63a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>+1 (555) 123-4567</div></div>
+      <div class="ft-col"><h4>Ready to Join?</h4><p style="font-size:12.5px;color:var(--dim);line-height:1.6">Register now and be part of the most exciting technical festival of 2026.</p><button class="ft-btn" onclick="go('register')">Register Now</button></div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 TECHNOVA 2026. All rights reserved.</span><span>Designed with <span class="inn">innovation</span> and <span class="pas">passion</span></span></div>
+  </footer>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── ROUTING ──
+function go(page) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('p-' + page).classList.add('active');
+  const link = document.querySelector(`.nav-links a[data-p="${page}"]`);
+  if (link) link.classList.add('active');
+  window.scrollTo({top:0,behavior:'instant'});
+  setTimeout(initReveal, 80);
+}
+
+// ── SCROLL REVEAL ──
+function initReveal() {
+  const page = document.querySelector('.page.active');
+  if (!page) return;
+  const els = page.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis') });
+  }, {threshold: 0.12});
+  els.forEach(el => { el.classList.remove('vis'); obs.observe(el); });
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  initReveal();
+  // Duplicate marquee
+  const mt = document.getElementById('mtrack');
+  if (mt) mt.innerHTML += mt.innerHTML;
+});
+</script>
+</body>
+</html>
