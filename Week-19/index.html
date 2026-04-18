@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doubly Linked List Playlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e1e2f 0%, #121212 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+        }
+
+        .song-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .song-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+            border-left: 4px solid #6366f1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+            transition: opacity 0.2s;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+                MusicBox Pro
+            </h1>
+            <p class="text-gray-400 mt-2">Doubly Linked List Powered Playlist</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            
+            <!-- Controls Section -->
+            <div class="lg:col-span-1 flex flex-col gap-6">
+                <!-- Add New Song -->
+                <div class="glass-panel p-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Add New Song
+                    </h2>
+                    <div class="space-y-3">
+                        <input type="text" id="songTitle" placeholder="Song Title" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <input type="text" id="artistName" placeholder="Artist Name" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        
+                        <div class="grid grid-cols-2 gap-2 pt-2">
+                            <button onclick="handleAddFront()" class="btn-primary text-white font-medium py-2 rounded-lg text-sm">Add Front</button>
+                            <button onclick="handleAddEnd()" class="btn-primary text-white font-medium py-2 rounded-lg text-sm">Add End</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Delete Song -->
+                <div class="glass-panel p-6">
+                    <h2 class="text-xl font-semibold mb-4 flex items-center text-red-400">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        Delete Song
+                    </h2>
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <input type="number" id="deletePos" placeholder="Position (1...)" class="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 min-w-0">
+                        <button onclick="handleDelete()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors">Delete</button>
+                    </div>
+                </div>
+
+                <!-- Reverse Button -->
+                <div class="glass-panel p-6">
+                    <button onclick="handleReverse()" class="w-full border border-indigo-500 text-indigo-400 hover:bg-indigo-500 hover:text-white font-bold py-3 rounded-xl transition-all flex items-center justify-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
+                        REVERSE (SHUFFLE MODE)
+                    </button>
+                    <p class="text-xs text-gray-500 mt-3 text-center italic leading-tight">Algorithm: Swapping next & prev pointers of each node.</p>
+                </div>
+            </div>
+
+            <!-- Playlist Display Section -->
+            <div class="lg:col-span-2">
+                <div class="glass-panel p-6 min-h-[400px]">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold">Your Playlist</h2>
+                        <span id="songCount" class="bg-indigo-900 text-indigo-200 px-3 py-1 rounded-full text-xs font-bold">0 Songs</span>
+                    </div>
+                    
+                    <div id="playlistContainer" class="space-y-3">
+                        <!-- Songs will be injected here -->
+                        <div class="text-center py-20 text-gray-600">
+                            <svg class="w-16 h-16 mx-auto mb-4 opacity-20" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.12-3 2.5S3.343 19 5 19s3-1.12 3-2.5V8.55l8-1.6V12.114A4.369 4.369 0 0015 12c-1.657 0-3 1.12-3 2.5s1.343 2.5 3 2.5 3-1.12 3-2.5V3z"></path></svg>
+                            <p>Playlist empty hai. Gaane add karein!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Feedback Message Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-2xl transform translate-y-20 transition-transform duration-300 pointer-events-none z-50">
+        Operation Successful
+    </div>
+
+    <script>
+        /**
+         * Doubly Linked List Logic
+         */
+        class Node {
+            constructor(title, artist) {
+                this.title = title;
+                this.artist = artist;
+                this.id = Date.now() + Math.random();
+                this.next = null;
+                this.prev = null;
+            }
+        }
+
+        class DoublyLinkedList {
+            constructor() {
+                this.head = null;
+                this.tail = null;
+                this.length = 0;
+            }
+
+            // Add to front
+            addFront(title, artist) {
+                const newNode = new Node(title, artist);
+                if (!this.head) {
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    newNode.next = this.head;
+                    this.head.prev = newNode;
+                    this.head = newNode;
+                }
+                this.length++;
+                return this;
+            }
+
+            // Add to end
+            addEnd(title, artist) {
+                const newNode = new Node(title, artist);
+                if (!this.head) {
+                    this.head = newNode;
+                    this.tail = newNode;
+                } else {
+                    this.tail.next = newNode;
+                    newNode.prev = this.tail;
+                    this.tail = newNode;
+                }
+                this.length++;
+                return this;
+            }
+
+            // Delete by position (1-based index)
+            deleteAt(pos) {
+                if (pos < 1 || pos > this.length) return false;
+
+                let current = this.head;
+                
+                // If head
+                if (pos === 1) {
+                    this.head = current.next;
+                    if (this.head) this.head.prev = null;
+                    else this.tail = null;
+                } 
+                // If tail
+                else if (pos === this.length) {
+                    current = this.tail;
+                    this.tail = current.prev;
+                    this.tail.next = null;
+                } 
+                // Middle
+                else {
+                    let count = 1;
+                    while (count < pos) {
+                        current = current.next;
+                        count++;
+                    }
+                    current.prev.next = current.next;
+                    current.next.prev = current.prev;
+                }
+
+                this.length--;
+                return true;
+            }
+
+            // Reverse the list
+            reverse() {
+                if (!this.head) return;
+
+                let current = this.head;
+                let temp = null;
+                
+                this.tail = this.head;
+
+                while (current !== null) {
+                    temp = current.prev;
+                    current.prev = current.next;
+                    current.next = temp;
+                    
+                    this.head = current;
+                    current = current.prev;
+                }
+            }
+
+            // Helper to get array for UI
+            toArray() {
+                const result = [];
+                let current = this.head;
+                while (current) {
+                    result.push({
+                        title: current.title,
+                        artist: current.artist,
+                        id: current.id
+                    });
+                    current = current.next;
+                }
+                return result;
+            }
+        }
+
+        const myPlaylist = new DoublyLinkedList();
+
+        function updateUI() {
+            const container = document.getElementById('playlistContainer');
+            const countBadge = document.getElementById('songCount');
+            const songs = myPlaylist.toArray();
+            
+            countBadge.innerText = `${myPlaylist.length} Song${myPlaylist.length !== 1 ? 's' : ''}`;
+
+            if (songs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20 text-gray-600">
+                        <svg class="w-16 h-16 mx-auto mb-4 opacity-20" fill="currentColor" viewBox="0 0 20 20"><path d="M18 3a1 1 0 00-1.196-.98l-10 2A1 1 0 006 5v9.114A4.369 4.369 0 005 14c-1.657 0-3 1.12-3 2.5S3.343 19 5 19s3-1.12 3-2.5V8.55l8-1.6V12.114A4.369 4.369 0 0015 12c-1.657 0-3 1.12-3 2.5s1.343 2.5 3 2.5 3-1.12 3-2.5V3z"></path></svg>
+                        <p>Playlist empty hai. Gaane add karein!</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = songs.map((song, index) => `
+                <div class="song-card glass-panel p-4 flex items-center justify-between group">
+                    <div class="flex items-center space-x-4 min-w-0">
+                        <div class="flex-shrink-0 w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-white">
+                            ${index + 1}
+                        </div>
+                        <div class="truncate">
+                            <h3 class="font-semibold text-white truncate">${song.title}</h3>
+                            <p class="text-sm text-gray-400 truncate">${song.artist}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                toast.style.transform = 'translateY(100px)';
+            }, 2500);
+        }
+
+        function handleAddFront() {
+            const t = document.getElementById('songTitle').value;
+            const a = document.getElementById('artistName').value;
+            if(!t || !a) return showToast("Details bhariye!");
+            
+            myPlaylist.addFront(t, a);
+            clearInputs();
+            updateUI();
+            showToast("Added to Front!");
+        }
+
+        function handleAddEnd() {
+            const t = document.getElementById('songTitle').value;
+            const a = document.getElementById('artistName').value;
+            if(!t || !a) return showToast("Details bhariye!");
+            
+            myPlaylist.addEnd(t, a);
+            clearInputs();
+            updateUI();
+            showToast("Added to End!");
+        }
+
+        function handleDelete() {
+            const pos = parseInt(document.getElementById('deletePos').value);
+            if(isNaN(pos)) return showToast("Position number daalein");
+            
+            const success = myPlaylist.deleteAt(pos);
+            if(success) {
+                updateUI();
+                showToast(`Position ${pos} deleted`);
+                document.getElementById('deletePos').value = '';
+            } else {
+                showToast("Invalid position!");
+            }
+        }
+
+        function handleReverse() {
+            if(myPlaylist.length < 2) return showToast("Kam se kam 2 gaane chahiye");
+            myPlaylist.reverse();
+            updateUI();
+            showToast("Playlist Reversed!");
+        }
+
+        function clearInputs() {
+            document.getElementById('songTitle').value = '';
+            document.getElementById('artistName').value = '';
+        }
+
+        window.onload = () => {
+            myPlaylist.addEnd("Tum Hi Ho", "Arijit Singh");
+            myPlaylist.addEnd("Blinding Lights", "The Weeknd");
+            updateUI();
+        };
+    </script>
+</body>
+</html>
