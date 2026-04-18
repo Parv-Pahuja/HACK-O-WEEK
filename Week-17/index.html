@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ATM Queue System</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* CARD */
+.container {
+    background: #111;
+    padding: 25px;
+    border-radius: 15px;
+    width: 420px;
+    color: #0f0;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+/* TITLE */
+h2 {
+    text-align: center;
+    color: #00ffcc;
+}
+
+/* INPUT */
+input {
+    width: 60%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    margin-right: 5px;
+}
+
+/* BUTTONS */
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+.add { background: #00c853; color: white; }
+.serve { background: #ff9800; color: white; }
+.reset { background: #f44336; color: white; }
+
+button:hover {
+    transform: scale(1.05);
+}
+
+/* QUEUE DISPLAY */
+.queue {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 8px;
+}
+
+.box {
+    width: 60px;
+    height: 60px;
+    background: #222;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    transition: 0.4s;
+}
+
+/* FRONT & REAR */
+.front {
+    border: 2px solid #00ffcc;
+}
+
+.rear {
+    border: 2px solid #ff4081;
+}
+
+/* STATUS */
+.status {
+    margin-top: 15px;
+    text-align: center;
+    color: #fff;
+}
+
+/* TOKEN */
+.token {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 18px;
+    color: #00ffcc;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>ATM Queue System</h2>
+
+    <input type="text" id="name" placeholder="Enter Name">
+    <button class="add" onclick="enqueue()">Add</button>
+
+    <div>
+        <button class="serve" onclick="serve()">Serve</button>
+        <button class="reset" onclick="resetQueue()">Reset</button>
+    </div>
+
+    <div class="queue" id="queue"></div>
+
+    <div class="token" id="token">Now Serving: -</div>
+
+    <div class="status" id="status"></div>
+</div>
+
+<script>
+
+/*
+==============================
+CIRCULAR QUEUE IMPLEMENTATION
+==============================
+*/
+
+const SIZE = 6; // max customers
+let queue = new Array(SIZE).fill(null);
+let front = -1;
+let rear = -1;
+let tokenCounter = 1;
+
+// LOAD FROM LOCAL STORAGE
+(function load() {
+    let data = JSON.parse(localStorage.getItem("atmQueue"));
+    if (data) {
+        queue = data.queue;
+        front = data.front;
+        rear = data.rear;
+        tokenCounter = data.tokenCounter;
+        render();
+    }
+})();
+
+// SAVE STATE
+function save() {
+    localStorage.setItem("atmQueue", JSON.stringify({
+        queue, front, rear, tokenCounter
+    }));
+}
+
+/*
+ENQUEUE (ADD CUSTOMER)
+Circular Logic:
+rear = (rear + 1) % SIZE
+*/
+function enqueue() {
+    let name = document.getElementById("name").value.trim();
+    if (!name) return;
+
+    // FULL CONDITION
+    if ((rear + 1) % SIZE === front) {
+        showStatus("Queue Full ❌");
+        return;
+    }
+
+    let customer = {
+        name: name,
+        token: tokenCounter++
+    };
+
+    // FIRST ELEMENT
+    if (front === -1) {
+        front = 0;
+        rear = 0;
+    } else {
+        rear = (rear + 1) % SIZE;
+    }
+
+    queue[rear] = customer;
+
+    document.getElementById("name").value = "";
+    showStatus("Customer Added ✅");
+
+    save();
+    render();
+}
+
+/*
+DEQUEUE (SERVE CUSTOMER)
+Circular Logic:
+front = (front + 1) % SIZE
+*/
+function serve() {
+
+    // EMPTY CONDITION
+    if (front === -1) {
+        showStatus("Queue Empty ⚠️");
+        return;
+    }
+
+    let served = queue[front];
+
+    document.getElementById("token").textContent =
+        "Now Serving: " + served.name + " (T" + served.token + ")";
+
+    // SIMULATE ATM PROCESS
+    showStatus("Processing...");
+    
+    setTimeout(() => {
+
+        if (front === rear) {
+            front = rear = -1;
+        } else {
+            front = (front + 1) % SIZE;
+        }
+
+        showStatus("Customer Served ✔️");
+        save();
+        render();
+
+    }, 2000);
+}
+
+// RESET
+function resetQueue() {
+    queue = new Array(SIZE).fill(null);
+    front = rear = -1;
+    tokenCounter = 1;
+    showStatus("Queue Reset 🔄");
+    save();
+    render();
+}
+
+// RENDER UI
+function render() {
+    let container = document.getElementById("queue");
+    container.innerHTML = "";
+
+    for (let i = 0; i < SIZE; i++) {
+        let div = document.createElement("div");
+        div.className = "box";
+
+        if (queue[i]) {
+            div.textContent = "T" + queue[i].token;
+        }
+
+        if (i === front && front !== -1) {
+            div.classList.add("front");
+        }
+
+        if (i === rear && rear !== -1) {
+            div.classList.add("rear");
+        }
+
+        container.appendChild(div);
+    }
+}
+
+// STATUS MESSAGE
+function showStatus(msg) {
+    document.getElementById("status").textContent = msg;
+}
+
+// INITIAL RENDER
+render();
+
+</script>
+
+</body>
+</html>
