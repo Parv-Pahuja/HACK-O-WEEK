@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NEXORA — Tech & Gadgets</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:        #0a0c10;
+      --surface:   #111318;
+      --surface2:  #181c24;
+      --border:    #1f2430;
+      --accent:    #4f8ef7;
+      --accent2:   #a259ff;
+      --green:     #00d67e;
+      --red:       #ff4d6d;
+      --text:      #e8eaf0;
+      --muted:     #5a6175;
+      --white:     #ffffff;
+    }
+
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOW ORBS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 { width: 500px; height: 500px; background: rgba(79,142,247,0.08); top: -150px; right: -100px; }
+    .orb-2 { width: 400px; height: 400px; background: rgba(162,89,255,0.07); bottom: 0; left: -100px; }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10,12,16,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 clamp(1.2rem, 5vw, 3.5rem);
+      height: 62px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--accent);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; box-shadow: 0 0 12px var(--accent); }
+      50%      { opacity: 0.6; box-shadow: 0 0 24px var(--accent); }
+    }
+
+    nav { display: flex; gap: 0.25rem; }
+    .nav-link {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      padding: 0.4rem 0.8rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-link:hover { color: var(--text); }
+
+    .header-right { display: flex; align-items: center; gap: 0.75rem; }
+
+    .cart-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1.1rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .cart-btn:hover {
+      background: #3a7ef6;
+      box-shadow: 0 0 24px rgba(79,142,247,0.4);
+    }
+    .cart-count {
+      background: rgba(255,255,255,0.2);
+      border-radius: 3px;
+      width: 20px; height: 20px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .cart-count.bump { transform: scale(1.5); }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      padding: clamp(3rem,8vw,6rem) clamp(1.2rem,5vw,3.5rem) clamp(2rem,5vw,3rem);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(79,142,247,0.1);
+      border: 1px solid rgba(79,142,247,0.2);
+      color: var(--accent);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border-radius: 100px;
+      margin-bottom: 1.2rem;
+    }
+    .hero-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--accent); border-radius: 50%; }
+    .hero-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 5.5vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .hero-title .grad {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      margin-top: 1rem;
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 380px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+    .stat-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .stat-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 0.1rem; }
+
+    .hero-right {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .hero-feature-img {
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 1;
+      border-radius: 16px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(79,142,247,0.1);
+      display: block;
+    }
+    .hero-badge {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,12,16,0.9);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      border-radius: 8px;
+      padding: 0.75rem 1.2rem;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .hero-badge-icon { font-size: 1.4rem; }
+    .hero-badge-label { font-size: 0.75rem; color: var(--muted); }
+    .hero-badge-name { font-family: 'Syne', sans-serif; font-size: 0.88rem; font-weight: 600; color: var(--white); }
+    .hero-badge-price { font-size: 0.9rem; font-weight: 600; color: var(--accent); margin-left: 0.5rem; }
+
+    /* ── FILTERS ── */
+    .filters-bar {
+      position: relative;
+      z-index: 1;
+      padding: 0 clamp(1.2rem,5vw,3.5rem) 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filters-bar::-webkit-scrollbar { display: none; }
+    .filter-sep { width: 1px; height: 18px; background: var(--border); margin: 0 0.3rem; flex-shrink: 0; }
+    .filter-btn {
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.42rem 1rem;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.76rem;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 16px rgba(79,142,247,0.3);
+    }
+
+    /* ── GRID ── */
+    .section-head {
+      position: relative;
+      z-index: 1;
+      padding: 2rem clamp(1.2rem,5vw,3.5rem) 1.2rem;
+      display: flex;
+      align-items: baseline;
+      gap: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--white);
+    }
+    .section-count {
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      margin: 0 clamp(1.2rem,5vw,3.5rem) clamp(3rem,6vw,5rem);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.45s forwards;
+    }
+    .card.hidden { display: none; }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .card:nth-child(1) { animation-delay: 0.04s; }
+    .card:nth-child(2) { animation-delay: 0.1s;  }
+    .card:nth-child(3) { animation-delay: 0.16s; }
+    .card:nth-child(4) { animation-delay: 0.22s; }
+    .card:nth-child(5) { animation-delay: 0.28s; }
+    .card:nth-child(6) { animation-delay: 0.34s; }
+    .card:nth-child(7) { animation-delay: 0.4s;  }
+    .card:nth-child(8) { animation-delay: 0.46s; }
+
+    .card:hover { background: var(--surface2); }
+
+    .card-img-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: var(--surface2);
+    }
+    .card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: block;
+    }
+    .card:hover .card-img { transform: scale(1.06); }
+
+    .card-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(10,12,16,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .card:hover .card-img-overlay { opacity: 1; }
+
+    .badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.55rem;
+      border-radius: 3px;
+      z-index: 2;
+    }
+    .badge.new   { background: var(--green);  color: #000; }
+    .badge.sale  { background: var(--red);    color: #fff; }
+    .badge.hot   { background: var(--accent2);color: #fff; }
+
+    .rating {
+      position: absolute;
+      bottom: 0.75rem;
+      left: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      background: rgba(10,12,16,0.75);
+      border-radius: 4px;
+      padding: 0.2rem 0.5rem;
+      font-size: 0.7rem;
+      color: var(--text);
+      z-index: 2;
+      opacity: 0;
+      transform: translateY(4px);
+      transition: all 0.3s;
+    }
+    .card:hover .rating { opacity: 1; transform: translateY(0); }
+    .stars { color: #f5c518; font-size: 0.65rem; }
+
+    .quick-add {
+      position: absolute;
+      bottom: 0;
+      left: 0; right: 0;
+      background: rgba(79,142,247,0.92);
+      color: #fff;
+      border: none;
+      padding: 0.75rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transform: translateY(100%);
+      transition: transform 0.3s cubic-bezier(0.25,0.46,0.45,0.94), background 0.2s;
+      z-index: 3;
+    }
+    .card:hover .quick-add { transform: translateY(0); }
+    .quick-add:hover { background: var(--accent2); }
+
+    .card-body {
+      padding: 1rem 1.1rem 1.3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      flex: 1;
+    }
+    .card-category {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .card-name {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--white);
+    }
+    .card-desc {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.7rem;
+      padding-top: 0.7rem;
+      border-top: 1px solid var(--border);
+    }
+    .price-wrap { display: flex; align-items: baseline; gap: 0.4rem; }
+    .card-price {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+    .card-price-old {
+      font-size: 0.78rem;
+      text-decoration: line-through;
+      color: var(--muted);
+    }
+    .wishlist-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 1.15rem;
+      transition: color 0.2s, transform 0.2s;
+      line-height: 1;
+    }
+    .wishlist-btn:hover, .wishlist-btn.liked { color: var(--red); }
+    .wishlist-btn:hover { transform: scale(1.2); }
+
+    /* ── TOAST ── */
+    #toast {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--green);
+      padding: 0.8rem 1.3rem;
+      font-size: 0.8rem;
+      z-index: 999;
+      border-radius: 6px;
+      transform: translateY(120%);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      pointer-events: none;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    #toast::before { content: '✓'; color: var(--green); font-weight: 700; }
+    #toast.show { transform: translateY(0); }
+
+    /* ── OVERLAY + DRAWER ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(4px);
+    }
+    .overlay.open { opacity: 1; pointer-events: all; }
+
+    .drawer {
+      position: fixed;
+      right: 0; top: 0; bottom: 0;
+      width: min(400px, 94vw);
+      background: var(--surface);
+      z-index: 201;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border);
+    }
+    .drawer.open { transform: translateX(0); }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .drawer-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--white);
+    }
+    .drawer-close {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      width: 32px; height: 32px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .drawer-close:hover { color: var(--white); border-color: var(--accent); }
+
+    .drawer-items {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+    }
+
+    .drawer-empty {
+      margin: auto;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.82rem;
+      line-height: 2;
+    }
+    .drawer-empty span { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.75rem;
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(20px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    .cart-item-img {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 4px;
+      background: var(--bg);
+      flex-shrink: 0;
+    }
+    .cart-item-info { flex: 1; min-width: 0; }
+    .cart-item-name { font-size: 0.82rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--white); }
+    .cart-item-price { font-size: 0.75rem; color: var(--accent); margin-top: 0.1rem; }
+    .cart-item-remove {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      flex-shrink: 0;
+      padding: 0.25rem;
+    }
+    .cart-item-remove:hover { color: var(--red); }
+
+    .drawer-footer {
+      border-top: 1px solid var(--border);
+      padding: 1.25rem 1.5rem;
+    }
+    .drawer-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 1rem;
+    }
+    .drawer-total-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .drawer-total-val { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700; color: var(--white); }
+    .checkout-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      padding: 0.95rem;
+      font-family: 'Syne', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 6px;
+      transition: opacity 0.2s, box-shadow 0.2s;
+    }
+    .checkout-btn:hover {
+      opacity: 0.9;
+      box-shadow: 0 0 28px rgba(79,142,247,0.35);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    @media (max-width: 700px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      nav { display: none; }
+      .grid { margin: 0 1rem 3rem; }
+      .filters-bar, .section-head { padding-left: 1rem; padding-right: 1rem; }
+      header { padding: 0 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    NEXORA
+  </div>
+  <nav>
+    <button class="nav-link">Deals</button>
+    <button class="nav-link">New In</button>
+    <button class="nav-link">Brands</button>
+    <button class="nav-link">Support</button>
+  </nav>
+  <div class="header-right">
+    <button class="cart-btn" onclick="openDrawer()">
+      🛒 Cart <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Spring 2025 Drop</div>
+    <h1 class="hero-title">Future-ready<br><span class="grad">tech. Today.</span></h1>
+    <p class="hero-sub">Handpicked gadgets for creators, professionals, and everyday explorers. Fast shipping, genuine products.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-val">8+</div>
+        <div class="stat-label">Curated Items</div>
+      </div>
+      <div>
+        <div class="stat-val">2-Day</div>
+        <div class="stat-label">Delivery</div>
+      </div>
+      <div>
+        <div class="stat-val">100%</div>
+        <div class="stat-label">Genuine</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img class="hero-feature-img"
+      src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=700&q=80"
+      alt="Sony Headphones featured"/>
+    <div class="hero-badge">
+      <span class="hero-badge-icon">🎧</span>
+      <div>
+        <div class="hero-badge-label">Featured this week</div>
+        <div class="hero-badge-name">Sony WH-1000XM5 <span class="hero-badge-price">₹28,990</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-bar">
+  <button class="filter-btn active" data-filter="all">All Products</button>
+  <div class="filter-sep"></div>
+  <button class="filter-btn" data-filter="audio">Audio</button>
+  <button class="filter-btn" data-filter="accessories">Accessories</button>
+  <button class="filter-btn" data-filter="wearables">Wearables</button>
+  <button class="filter-btn" data-filter="displays">Displays</button>
+  <button class="filter-btn" data-filter="mobile">Mobile</button>
+</div>
+
+<!-- SECTION HEAD -->
+<div class="section-head">
+  <span class="section-title">All Products</span>
+  <span class="section-count" id="visibleCount">8 items</span>
+</div>
+
+<!-- GRID -->
+<main class="grid" id="productGrid"></main>
+
+<!-- TOAST -->
+<div id="toast">Added to cart</div>
+
+<!-- OVERLAY -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<!-- CART DRAWER -->
+<aside class="drawer" id="drawer">
+  <div class="drawer-header">
+    <span class="drawer-title">Your Cart</span>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="drawer-items" id="drawerItems"></div>
+  <div class="drawer-footer">
+    <div class="drawer-total">
+      <span class="drawer-total-label">Total</span>
+      <span class="drawer-total-val" id="drawerTotal">₹0</span>
+    </div>
+    <button class="checkout-btn">Proceed to Checkout →</button>
+  </div>
+</aside>
+
+<footer>© 2025 NEXORA — Premium Tech & Gadgets. All prices in INR including taxes.</footer>
+
+<script>
+  const products = [
+    {
+      id: 1,
+      name: "Sony WH-1000XM5",
+      category: "audio",
+      desc: "Industry-leading noise cancelling with 30-hour battery life and Multipoint Bluetooth.",
+      price: 28990,
+      badge: "hot",
+      badgeLabel: "Hot",
+      rating: "4.8",
+      reviews: "2.4k",
+      img: "data:image/webp;base64,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"
+    },
+    {
+      id: 2,
+      name: "Keychron Q3 Keyboard",
+      category: "accessories",
+      desc: "Hot-swappable mechanical keyboard with QMK/VIA support and aluminium body.",
+      price: 12499,
+      badge: "new",
+      badgeLabel: "New",
+      rating: "4.7",
+      reviews: "891",
+      img: "data:image/webp;base64,UklGRl4FAABXRUJQVlA4IFIFAABQGACdASpaADMAPlkalksjoSOjk1BwCwlAGbWqZBGOXCz24u4Y3lLeW/tV9oCsd8wvtySqSptgP8ZwxO5b49/Pf9H/U/G11LInTx8JA/P0/4P8h+R3uG+i/+/7hv6y9Zj0eP2OSHWbb+Hk0//3FM04Rn/MCx+ta7cosvOR3N6xQbh5H3H27hPCXynE0KtpMU60j51y+e8k/D8BaWk9X5jZEhPab4APSa1TKB661rDjgamEIgizYPcZOBaFHmE85VOWV1wE7ts3B/8gAAD+/7ln+Ejn0uWO+vHJKdTX+WpRjLPx/95x8HoabNr+DngCrI69p/Z+Qz9885cVgzPzaXnONYvSv/u4ypKPTfqgm2GxTrnWPdwJXXoYU7+3id/WbqP10xEj+V3BMF/fDc0FIz6WqJMF4UAHS6H9Ve6LteqLbctska4dbNXN8lxaY35ycT3MjnsaC1uLCn4RvEPI+H8YF9R7ei5qd1BjfZ5Ysi6NC/1rENJzgqaF/fIxhsWJia4hvSda+Qv963DgtxsoqDgMfUPmwTAs0eOMHTj/7I/gu+xgR3VYo6Wct79zCzy/KHSy/5q5zUN2QqcjBtZ+iK2EK6IMoM4938HGOPD7InGKig/U/NuFcKOIa9sSXgNklKX6+sk/pH7E+dBQ8I8CnnELzUpT828RcKyWtdTdK4+qxeH30GiP/sj+GeQYdOrbxm0ZmhV+uCw2+0PJB66nXXZobu1b89hpfiaQ3A5ouHI4/wczHUxwdjuTgg52lKYW88VOa+fK4RqPOkRNPe5bmsz00hBmTM/pzLQo8lRREjfRQL5ILoUccnOxYe6XwxgTY2fikG/NODBrACcxVZYun2kPHff/Yy/LeX46a5xanU9aUuzHCtLck81rHwWosnie4U9zURdxwytqqmvX6BjfWu1niK+8eozPoznKq7jx8yVz+b9HxAadzhkNV+IsmcgCuxL8AhihoE2fLrqOPSJB3pstkZFBSMYJfurA1f5nAcTkjm3047Uphfq1zzifkNXbYfM/eJGA4LyjkgltZcsxo4I/btofwBpMpeDpTvMRu4JU8tDVtx9iPKv7roNLCVZ76imAIoT6y767qbzjoEew8Yi8Ca1x/1wzzWzqRFM1oQyYJeyuR+RbLfUatwZv0jbOy6Hb0miZ8+X3/iopvxFfAZHmsUymmRoe+pgK52L/xtQZxRcHV10BEkh0chEqNCZYz40e3Hj+oSzyV/hY3PVMwfN8WQ1lE/ehzh/PrulzcoSAsguC+G2nWhLXS3Ej8VM+Tq0sf0eu9sqxRkENqFPtmnBSvh/zkQuBeDnBTmj3IlPT+SteSyzrf22r74/P6JmmDZXOuIWn8SLE/osKV5X9oSg24EQF6SYId2jFm3FkqP6abP40AS03G+gxp0VXGunMGLl82kY6pxnI0yjEdbskr8E2pCKRq0QQn5CPuX44yZ3FHTp5LNUe0aY8Fki61/5szs4zlvYl5Lx9XoXa9QFDp2CxgU81ZCw64kqnvufOBJMfzYWlnXdL/xvPC/TRywK9E5uxcr9BnmiM9eZT3Gd2Un+IU9o/REDMG6Tmj1PjeThSX/jbmA3JzZDi5kfULBgz5ogTqAE3obmyV+Br7bT+AA/P/zqoP+P40KZQLtESOGuE4lZNPmBwxWN1Iyf4zvtP7yb7dj0ChFsZQpshLMnTEkWbKQnq3KeRPG0FX1V8mak8OvKF5QskG61AKUwRkT80kNQOlJknSpBsIyZz5nr0kKaHnNomxeJD5MB5GnPDbAepV927nDnhtEFmlcjoUINRs1LZREPM0oWjxIH7lR4OQaDXQAA="
+    },
+    {
+      id: 3,
+      name: "Apple Watch Series 9",
+      category: "wearables",
+      desc: "S9 chip, always-on Retina display, crash detection and advanced health sensors.",
+      price: 41900,
+      badge: null,
+      rating: "4.9",
+      reviews: "5.1k",
+      img: "data:image/webp;base64,UklGRtIDAABXRUJQVlA4IMYDAADQEgCdASpEAFoAPkUQkUiikVFK8CgERLKAannleFljhMD1YbdW7gKe9WA6Lj0R7N5RCN7tUjHcCXDQRvfqB7GH+l/ffP79Ef9/3B/1Y9KX2KegB+wC+ShVumZVyl+u/1wfZH5LNaRGdOLJtxGywBfJYgOcCWLl3KNquPWVEdopMn75kjDI3S3O/PEX/kSuD3sihpqgOYVji5a2ez7zPoAA/v74aAyfmKdaa6P/DVD+bJgkEs9HcSB1oa1Tc95g8iKMSy9NAMVqkBT+EEYZdWI2MfZi8hk/44b2iznchTDbu9MpliXrlkvebbUCZ/T0Xdji1OV65LzbuQysnGtcBA9PqVR4sumF3kFi4T7VUyx5sfv33j/P/P85FJNXGWkab173cnotdAyN4LMaaymqXGuuvnEM6Qvz0j0D23PFvqkdGCqaYqmAqQWgb+8U9oSIf3f0SjxqOJCxHZfcW95AKXeiGHdf9DHn4NYP/jF4JOqXpuZR+b+ltDj/q3tKzSTUOthBODZk/ZDzbWPzAr8zub6c9poKnOCM7/MvfrQ/9aXpbZ++Q9pd4A0tGDPsn36csc/mdcYj1UgPfeV/eJ8l8kFWcVgtji+a0jAugJRyW78gZ2GSyXYJ+ZdUWfo+bGLRC2bWW0hi2m8s1gkX0uhW2tLDtKR80LxWKoiOj2zxuNWiIrMdcmxaEoYr7GdlI9pW19tsYtEdscdEe7Xpoea1I/WQdNAO3fZk/i6YdcTJLnyU4BOD/R/VxVhtonZ//tGpuOhbkonRLN3h44zMjUFMW6Bc74K3v4CB5iO5HRjOmUEEHCSf6Uim/jt+aWtBU9b+d/SV0g5Pxf/i/vq43C4Q7vkFpz5B7AI+llh49iMQbfibwL/p5IWNv+dYfzm4QNzmKV+iUfszIqrvSDwNR4nlDr/4lHnntgyk0//dqkgk5L2PyrR/KlE4C1gYxXaP8Bkkkf3UhpG34apwdsk9mAmoKNmIEd3QvLMlrRKCpAs+TA3r1JqZwsjpekEjYu+FsdROckpO/gIuUaT6nqOoeMWIDXDchW83+MaSGoGjwe6OSZAFK8ZweEFHrmzSCHku6H7KYudYggtxcLUq/jhYDR2q8ZNYh5XPx8Q0NSEPoBcOHiblazsLLZC/o1XclDgTwTxzZYJpNUXVp+xddQo8pNENi1AtoszNICI5Y4qcTeGFt6RpyxVkP2zxEtDzAq1ylO9mMjAzyh1Feg/TweMqR0w/Fr3cv/qsckAfZ9KKrAGKVSywHefK31D/tLj0qWXqW7ln+J/Vj/AAAAA="
+    },
+    {
+      id: 4,
+      name: "Anker 165W Power Bank",
+      category: "accessories",
+      desc: "25,000mAh fast-charge bank with USB-C PD 3.0 and simultaneous 3-device charging.",
+      price: 6999,
+      badge: "sale",
+      badgeLabel: "Sale",
+      oldPrice: 8999,
+      rating: "4.6",
+      reviews: "1.2k",
+      img: "data:image/jpeg;base64,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"
+    },
+    {
+      id: 5,
+      name: "Logitech MX Master 3S",
+      category: "accessories",
+      desc: "8K DPI sensor, MagSpeed scroll wheel, works on any surface including glass.",
+      price: 9995,
+      badge: null,
+      rating: "4.8",
+      reviews: "3.7k",
+      img: "data:image/jpeg;base64,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"
+    },
+    {
+      id: 6,
+      name: "JBL Flip 6",
+      category: "audio",
+      desc: "IP67 waterproof portable speaker with bold JBL Pro Sound and 12-hour playtime.",
+      price: 10999,
+      badge: "sale",
+      badgeLabel: "Sale",
+      oldPrice: 13999,
+      rating: "4.5",
+      reviews: "4.0k",
+      img: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAFwAXAMBIgACEQEDEQH/xAAcAAEAAgIDAQAAAAAAAAAAAAAABQYEBwEDCAL/xAA5EAABAwMCAgYGCAcAAAAAAAABAAIDBAURBhIHISIxQWGBsRNRcXKRwRQkMlKhwtHwFTM0Q2Jzkv/EABYBAQEBAAAAAAAAAAAAAAAAAAABAv/EABURAQEAAAAAAAAAAAAAAAAAAAAR/9oADAMBAAIRAxEAPwDeKIiAiIgIiICIiAiIgIiICIiAiIgIiICIiAiIgIiICIiCMvt+t1gpRU3OoEbXHDGgZc8+oAdaodZxehDiKGzySN7HTzhh+ADvNUnX97feNT1ry/MEDzBC0nkGtOCfE5Krm9BsqTivd5OdPaqVoPVu3v8ALCxJ+JuqOn9WpIQ0Au+rP6IPVnLlA0l0ZT0paKjJa3ayTZyaGgNb0c/ec53tWFebl6eljgjIDN/PnnDWdFgJ+J9pUrUTcvEvVD87a2KP3KdnzBWJJxA1U/rvMg92GIflVVL+/wCBXBdyVZWmLWuqJCSb1UYHc0fJdlNxRv1HMAbmKloP2JYWlp8QAfxVVcDJTCIHAecux2j94XxPagLW6sY9jQyT0ezGDnGRhB6U0jqKm1NaGV1N0Xg7Jo882Px1eznyKm1ojgheTR319DI4+irY9uPU9vNvzHiFvdAREQeXL/FLS3u4QTNxIypkBB94qP3Ehbx4i8PDqCY3O0OjjuGMSxvOGzAdXPsd59y1FcdL6htz9lVY7g0/ejp3St/6YCPxQRvpBgDaT6+kuHScj0Tz7dy4mhngz9IgmiI7JYnN8wsb6TATgSx57nBSLXcXLhz1872kciPApy7FUSNEM9fWB+n6LKu8TKe3U22qbJ6ZpkfE3+27O3B78BYFO8OZt3FpxjI811PjqpJWsnO4ZwNjftILNwspHyartpaOqXd4Dn8l6MWveF2j5rRCLpcozFUyx4igI5xtPa71OPq7B39WwkBERAREQcEAjBGV0S0VJN/OpYJPfjBWQiCJqNMafqv6mxWub/ZRxu8wsN+hdJvOTpy1g/40rW+QViRBV3cPNJOOf4JTt9wub5FSFr0tYrVK2WgtdPFK3m2Qt3Ob7CckeCmEQEREBERAREQEREBERAREQEREH//Z"
+    },
+    {
+      id: 7,
+      name: "Samsung 27\" 4K Monitor",
+      category: "displays",
+      desc: "UHD IPS panel, 99% sRGB, USB-C 65W delivery, slim bezel frameless design.",
+      price: 34990,
+      badge: "new",
+      badgeLabel: "New",
+      rating: "4.7",
+      reviews: "612",
+      img: "data:image/jpeg;base64,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"
+    },
+    {
+      id: 8,
+      name: "Samsung Galaxy Tab S9",
+      category: "mobile",
+      desc: "11\" Dynamic AMOLED, Snapdragon 8 Gen 2, IP68 rated with S Pen included.",
+      price: 72999,
+      badge: "hot",
+      badgeLabel: "Hot",
+      rating: "4.8",
+      reviews: "980",
+      img: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAEcAXAMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAGAAMEBQcCAQj/xABCEAABAwMCAgUHCQQLAAAAAAABAgMEAAUREiEGMQcTQVFxFCJhgZGxwRUjM0JScpOh0QgyRbIXNDZEVFViY2Rz0//EABoBAAIDAQEAAAAAAAAAAAAAAAECAAMEBQb/xAAlEQACAgEEAAYDAAAAAAAAAAAAAQIDEQQSITEFEzJBQoEiUaH/2gAMAwEAAhEDEQA/ANxoM4w6QoXC1zRAehvSHVNpcKkrSlI1EgDfmdqM6w/phQy5xfh9rrUiGjA1Ywrz8HkeWeXby7ahAgPTJCH8Fl/iorz+maD/AJLL/FRWRLFNHnQyNg2MdMsI/wAGlfiop6P0tMSV9XHsM51f2W1pUfYKxYGtd6PwEcJxVoQNSi4VY5qOtQ+AooDD+3XxE2C1IVDksOLGVMOpAUg57d8U67PeAyEtI9ZV+lCKJl1X9DEaaGNlOrzk+A3A/Plt3OPtzJASpyapkDIUGwQCATg5zttjNQBbybhKWSOuUkdydqftyUOR1KdSlais7qGTyFCb1xstreddlXSK046fO66SkHmTsPXRFw7cYdytan7bLYkN9YU6216gDgbbVCDzktpqdGiFEbrJGShIXglKcaiNuzI2zTk952O6lDLq0pKc4znffvqvfs0eZLireYWTFdS40Q+rSFA6gcdu4HtPeamXMEvNkjB6sZAPpNLQpr1vI9zrUU4fYRViXS2Ari87cozY8f3q22sW6XRjiokf4RHvVTCozh+VGQSFPoyOYByR7KhOXBj6nWL+6j9ap1n51XjUlg4IrTXpt3bFciZ5S+v6GK4fvEJoltXFXE8G2swIKbewy1nSpaSte5JOd8cz3VQMK5VYMr5V0KvD6vdsXcyyXceKpv8AWOJHWweyOylH5jFR12LyzHyjdLlL9Dr5IPtzTrK6nsnIrVHQ6dfEG5lLeOHrVCsrz7MY9cCgJWpxR5qGds45Zov6HXX2OBeJ3YjhbfbZWtpYGdKwheDg+kChzi17RbY7Gd3XdR8Ej9SKM/2e8/Il107HrU79371crXxhG7EVjBItvKIyOIeKG2nSi6OuqQyHh1kZo+ac6SfM7SCPV41p88grbI5FsfGu3I61rytaVnuWgkezViuJ/wBKj7g95rPvjJ8LBT5c4Re6WeggWoISVKICQMknsFfOd0flT227lNeedXPQ5JR1qyrQ2p1zQkZ5AJAwOzNbdx9cDa+C71MQcLREWlB/1qGlP5kVlnHFuFqet9vT/dLWwznv0pIqk1oxtezq/vGnmlYrgjWtwDmFH30k+aa6VXEUytosWV8qnMuVUNrqYyuttcxS7jryQKtoidSgKooOVKFT7jO8giaG1ASHE+afsJ7VH4Vq3qMdzA3hFXxFMEq5qIOpqOOqQB9ZXb+fuo86FY0yZwneo1vlIiyHHWwHlI1BIyrO2RzGR66BbFaX7lLZQy0pWT82kbE959Hj2eOx0boHdbiWG+PSFhDTLgU4rchIGvJ768/qJNy3vti0vc5Iuza+KkuBLN/irGMDXHUN/HSav4yJzUKK3dHGnJaGtLi2c6VYJwdwOzGdudVY464SeSpbM1DiUpKiUw3Nhz+zV7OOXEEEHzOY8TStz43L+YGlCKXBG6RR5UzY7QMH5QuzCVpPa22S6r+Sg3pX/tAs/wDFR71UZ3JPl3SZZ2OaLbb35Z7gpxSW0+vAX+dB/SpgcQL1DGYiMZ8VVQXowuLHkypy2oUd6Q7qUerZbK1EA88DepjUdMpQbb2fJx1XaTywB49lEfBlwtdubnNy5ymTKWgqKEkKSW3FK0nzk6kKzuAock91GNu4ltIuHliWwE9atxUdlTLvWrLoWl5TrigvrNI043Gwweda6rJQWMZQdufYy0295CsFBB7sVMiW19wgaTWjM3SClr52Oeqy0fJSiIEpCW1JcT1mvUesUQSojI5jcCo9wk2p+DJc8rjJlLkqRGU2E62WSUuDzW8gLQRoSrI2J3Fao6iK+JFTOTxFN/QIh5mCnQ0RIk/ZTuEn01LsnDM+9yFSHsFsHK3HDhCfE9uO4cvRzo/j3i0zlF6VFkzXkNhIdnRw6FfNJSNJUSUDWkqOCMlRO5rq53mI5cmJD10bSluS86B1WhKW1DCUqSlWVKBydXMZyKpu1jn2uC5eHWyf5raipF5tfDzJiWJAnzVABb31faOwdw2p7oQjKn8K8RRdYQqTlrXjOkqCxnHrp248T2YQXY8RDslandi5sCM6iskjJVk6Qeekb+mV+z4wh3hy5Oq1pUZhSdKyNsZ7PE1hlbKyXK4GvqqqhGNccd/ZCgdFptiy15cxIUUY0r1JHiRjcejtrQ5qFqWjQg4CMbb43NXioDKuZd/ENdtRWm06QCd/rHNPK2UvUzI0cCCyma5NQkCS42lpbnaUJKikeorV7a4l2uJNIMyMw+QMAutJVgesUqVVhA2Z0QcHS5Dr6re40txRWoNSFpTknJwM4A9Aqvf6D+FnAeqeubPpbkp+KTSpVCERXQbZ0/QXe7t+LqD7kiuD0OLaGInFVxb7tbaVfEUqVHLGU5LpkGR0MXd3OeMXnPQ5HV/6VAd6Eb+PoOIYiz/uNrT+teUqjbfYfMn+yMroa40bPzdwtTg/7lg/yVpnRTwnP4O4feh3JbLkh6QXT1KspSMAAZPM7d1KlQBKcpdsNwSeyvaVKoKf/9k="
+    }
+  ];
+
+  let cart = [];
+  let wishlist = new Set();
+
+  function fmt(n) {
+    return '₹' + n.toLocaleString('en-IN');
+  }
+
+  function stars(r) {
+    const full = Math.round(parseFloat(r));
+    return '★'.repeat(full) + '☆'.repeat(5 - full);
+  }
+
+  function renderGrid(filter = 'all') {
+    const grid = document.getElementById('productGrid');
+    grid.innerHTML = '';
+    let visible = 0;
+    products.forEach(p => {
+      const show = filter === 'all' || p.category === filter;
+      if (show) visible++;
+      const card = document.createElement('div');
+      card.className = 'card' + (show ? '' : ' hidden');
+      card.dataset.category = p.category;
+      card.innerHTML = `
+        <div class="card-img-wrap">
+          <img class="card-img" src="${p.img}" alt="${p.name}" loading="lazy"/>
+          <div class="card-img-overlay"></div>
+          ${p.badge ? `<span class="badge ${p.badge}">${p.badgeLabel}</span>` : ''}
+          <div class="rating">
+            <span class="stars">${stars(p.rating)}</span>
+            ${p.rating} (${p.reviews})
+          </div>
+          <button class="quick-add" onclick="addToCart(${p.id})">+ Add to Cart</button>
+        </div>
+        <div class="card-body">
+          <span class="card-category">${p.category}</span>
+          <div class="card-name">${p.name}</div>
+          <div class="card-desc">${p.desc}</div>
+          <div class="card-footer">
+            <div class="price-wrap">
+              <span class="card-price">${fmt(p.price)}</span>
+              ${p.oldPrice ? `<span class="card-price-old">${fmt(p.oldPrice)}</span>` : ''}
+            </div>
+            <button class="wishlist-btn" id="wish-${p.id}" onclick="toggleWishlist(${p.id})">♡</button>
+          </div>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+    document.getElementById('visibleCount').textContent = visible + ' items';
+  }
+
+  function toggleWishlist(id) {
+    const btn = document.getElementById('wish-' + id);
+    if (wishlist.has(id)) {
+      wishlist.delete(id);
+      btn.textContent = '♡';
+      btn.classList.remove('liked');
+    } else {
+      wishlist.add(id);
+      btn.textContent = '♥';
+      btn.classList.add('liked');
+    }
+  }
+
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    cart.push({ ...p });
+    updateCartUI();
+    showToast(p.name + ' added to cart');
+  }
+
+  function removeFromCart(idx) {
+    cart.splice(idx, 1);
+    updateCartUI();
+    renderDrawer();
+  }
+
+  function updateCartUI() {
+    const count = document.getElementById('cartCount');
+    count.textContent = cart.length;
+    count.classList.remove('bump');
+    void count.offsetWidth;
+    count.classList.add('bump');
+    setTimeout(() => count.classList.remove('bump'), 400);
+    renderDrawer();
+  }
+
+  function renderDrawer() {
+    const items = document.getElementById('drawerItems');
+    const total = cart.reduce((s, p) => s + p.price, 0);
+    document.getElementById('drawerTotal').textContent = fmt(total);
+    if (cart.length === 0) {
+      items.innerHTML = `<div class="drawer-empty"><span>📦</span>Your cart is empty.<br>Add something awesome!</div>`;
+      return;
+    }
+    items.innerHTML = cart.map((p, i) => `
+      <div class="cart-item">
+        <img class="cart-item-img" src="${p.img}" alt="${p.name}"/>
+        <div class="cart-item-info">
+          <div class="cart-item-name">${p.name}</div>
+          <div class="cart-item-price">${fmt(p.price)}</div>
+        </div>
+        <button class="cart-item-remove" onclick="removeFromCart(${i})">✕</button>
+      </div>
+    `).join('');
+  }
+
+  function openDrawer() {
+    document.getElementById('drawer').classList.add('open');
+    document.getElementById('overlay').classList.add('open');
+    renderDrawer();
+  }
+
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+  }
+
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      this.classList.add('active');
+      const f = this.dataset.filter;
+      document.querySelectorAll('.card').forEach(card => {
+        card.classList.toggle('hidden', f !== 'all' && card.dataset.category !== f);
+      });
+      const count = document.querySelectorAll('.card:not(.hidden)').length;
+      document.getElementById('visibleCount').textContent = count + ' items';
+    });
+  });
+
+  renderGrid();
+</script>
+</body>
+</html>
