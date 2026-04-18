@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Score Tracker</title>
+    <style>
+        /* CSS for Styling */
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h2 { text-align: center; color: var(--primary-color); }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover { background-color: #357abd; }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: #eef2f7;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-label { font-size: 0.8rem; color: #666; display: block; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--primary-color); }
+
+        .score-list {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .chip {
+            display: inline-block;
+            background: #ddd;
+            padding: 5px 10px;
+            margin: 3px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Exam Score Tracker</h2>
+    
+    <div class="input-group">
+        <input type="number" id="scoreInput" placeholder="Enter score (0-100)" min="0" max="100">
+        <button onclick="addScore()">Add Score</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <span class="stat-label">Min Score</span>
+            <span id="minScore" class="stat-value">-</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Max Score</span>
+            <span id="maxScore" class="stat-value">-</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Mode (Most Frequent)</span>
+            <span id="modeScore" class="stat-value">-</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-label">Total Entries</span>
+            <span id="totalEntries" class="stat-value">0</span>
+        </div>
+    </div>
+
+    <h4>Recent Scores:</h4>
+    <div id="scoreList" class="score-list"></div>
+</div>
+
+<script>
+    // JS Logic
+    let scores = [];
+    // Frequency count array (Index represents score 0-100)
+    let frequencyArray = new Array(101).fill(0);
+
+    function addScore() {
+        const input = document.getElementById('scoreInput');
+        const val = parseInt(input.value);
+
+        if (isNaN(val) || val < 0 || val > 100) {
+            alert("Please enter a valid score between 0 and 100.");
+            return;
+        }
+
+        // Add to main array
+        scores.push(val);
+        
+        // Update Frequency Count (Array-based frequency)
+        frequencyArray[val]++;
+
+        // Clear input
+        input.value = '';
+
+        // Update UI
+        updateStats();
+        renderScores();
+    }
+
+    function updateStats() {
+        if (scores.length === 0) return;
+
+        let min = scores[0];
+        let max = scores[0];
+        let mode = 0;
+        let maxFreq = 0;
+
+        // Linear Traversal for Min and Max
+        for (let i = 0; i < scores.length; i++) {
+            if (scores[i] < min) min = scores[i];
+            if (scores[i] > max) max = scores[i];
+        }
+
+        // Linear Traversal on frequencyArray to find Mode
+        for (let i = 0; i < frequencyArray.length; i++) {
+            if (frequencyArray[i] > maxFreq) {
+                maxFreq = frequencyArray[i];
+                mode = i;
+            }
+        }
+
+        // Display results
+        document.getElementById('minScore').innerText = min;
+        document.getElementById('maxScore').innerText = max;
+        document.getElementById('modeScore').innerText = maxFreq > 0 ? mode : '-';
+        document.getElementById('totalEntries').innerText = scores.length;
+    }
+
+    function renderScores() {
+        const list = document.getElementById('scoreList');
+        list.innerHTML = scores.map(s => `<span class="chip">${s}</span>`).join('');
+    }
+</script>
+
+</body>
+</html>
