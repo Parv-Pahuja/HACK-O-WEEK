@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>File System Tree Visualizer</title>
+
+<style>
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #eef2f7;
+    text-align: center;
+}
+
+/* CONTROLS */
+input, select, button {
+    padding: 8px;
+    margin: 5px;
+}
+
+/* TREE AREA */
+#tree {
+    position: relative;
+    height: 500px;
+    border: 1px solid #ccc;
+    margin: 20px;
+    overflow: hidden;
+}
+
+/* NODE */
+.node {
+    position: absolute;
+    padding: 8px 12px;
+    background: white;
+    border: 2px solid #4a90e2;
+    border-radius: 8px;
+    transform: translate(-50%, -50%);
+    transition: 0.3s;
+}
+
+.node.highlight {
+    background: #ffd54f;
+}
+
+/* LINE */
+.line {
+    position: absolute;
+    height: 2px;
+    background: #999;
+    transform-origin: left;
+}
+
+.output {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+</style>
+</head>
+
+<body>
+
+<h2>📁 File System Tree Visualizer</h2>
+
+<input id="name" placeholder="Folder Name">
+<input id="parent" placeholder="Parent (Root default)">
+<select id="side">
+    <option value="left">Left</option>
+    <option value="right">Right</option>
+</select>
+
+<button onclick="add()">Add</button>
+<button onclick="reset()">Reset</button>
+
+<br>
+
+<button onclick="traverse('pre')">Pre</button>
+<button onclick="traverse('in')">In</button>
+<button onclick="traverse('post')">Post</button>
+
+<div id="tree"></div>
+<div class="output" id="out"></div>
+
+<script>
+
+/*
+====================
+BINARY TREE LOGIC
+====================
+*/
+
+let id = 0;
+
+class Node {
+    constructor(name) {
+        this.id = id++;
+        this.name = name;
+        this.left = null;
+        this.right = null;
+    }
+}
+
+let root = new Node("Root");
+
+/* FIND NODE */
+function find(node, name) {
+    if (!node) return null;
+    if (node.name === name) return node;
+    return find(node.left, name) || find(node.right, name);
+}
+
+/* ADD NODE */
+function add() {
+    let name = document.getElementById("name").value.trim();
+    let parentName = document.getElementById("parent").value.trim() || "Root";
+    let side = document.getElementById("side").value;
+
+    if (!name) return alert("Enter name");
+
+    let parent = find(root, parentName);
+    if (!parent) return alert("Parent not found");
+
+    let node = new Node(name);
+
+    if (side === "left") {
+        if (parent.left) return alert("Left occupied");
+        parent.left = node;
+    } else {
+        if (parent.right) return alert("Right occupied");
+        parent.right = node;
+    }
+
+    draw();
+}
+
+/*
+====================
+DRAW TREE (REAL FIX)
+====================
+*/
+function draw() {
+    let container = document.getElementById("tree");
+    container.innerHTML = "";
+
+    let width = container.clientWidth;
+
+    function render(node, x, y, gap) {
+        if (!node) return;
+
+        // CREATE NODE
+        let div = document.createElement("div");
+        div.className = "node";
+        div.id = "n-" + node.id;
+        div.innerText = node.name;
+        div.style.left = x + "px";
+        div.style.top = y + "px";
+
+        container.appendChild(div);
+
+        // LEFT CHILD
+        if (node.left) {
+            drawLine(x, y, x - gap, y + 80);
+            render(node.left, x - gap, y + 80, gap / 1.8);
+        }
+
+        // RIGHT CHILD
+        if (node.right) {
+            drawLine(x, y, x + gap, y + 80);
+            render(node.right, x + gap, y + 80, gap / 1.8);
+        }
+    }
+
+    render(root, width / 2, 40, width / 4);
+}
+
+/* DRAW LINE */
+function drawLine(x1, y1, x2, y2) {
+    let container = document.getElementById("tree");
+
+    let dx = x2 - x1;
+    let dy = y2 - y1;
+    let length = Math.sqrt(dx * dx + dy * dy);
+    let angle = Math.atan2(dy, dx) * 180 / Math.PI;
+
+    let line = document.createElement("div");
+    line.className = "line";
+    line.style.width = length + "px";
+    line.style.left = x1 + "px";
+    line.style.top = y1 + "px";
+    line.style.transform = `rotate(${angle}deg)`;
+
+    container.appendChild(line);
+}
+
+/*
+====================
+TRAVERSALS
+====================
+*/
+
+function preorder(n, arr) {
+    if (!n) return;
+    arr.push(n);
+    preorder(n.left, arr);
+    preorder(n.right, arr);
+}
+
+function inorder(n, arr) {
+    if (!n) return;
+    inorder(n.left, arr);
+    arr.push(n);
+    inorder(n.right, arr);
+}
+
+function postorder(n, arr) {
+    if (!n) return;
+    postorder(n.left, arr);
+    postorder(n.right, arr);
+    arr.push(n);
+}
+
+/* TRAVERSE */
+function traverse(type) {
+    let arr = [];
+
+    if (type === "pre") preorder(root, arr);
+    if (type === "in") inorder(root, arr);
+    if (type === "post") postorder(root, arr);
+
+    document.getElementById("out").innerText =
+        type + ": " + arr.map(n => n.name).join(" → ");
+
+    animate(arr);
+}
+
+/* ANIMATION */
+function animate(arr) {
+    let i = 0;
+
+    function step() {
+        document.querySelectorAll(".node").forEach(n => n.classList.remove("highlight"));
+
+        if (i < arr.length) {
+            let el = document.getElementById("n-" + arr[i].id);
+            if (el) el.classList.add("highlight");
+
+            i++;
+            setTimeout(step, 700);
+        }
+    }
+
+    step();
+}
+
+/* RESET */
+function reset() {
+    id = 0;
+    root = new Node("Root");
+    document.getElementById("out").innerText = "";
+    draw();
+}
+
+/* INIT */
+window.onload = draw;
+
+</script>
+
+</body>
+</html>
